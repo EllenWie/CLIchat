@@ -1,15 +1,22 @@
 package com.db.chat;
 
+import java.util.Date;
+
 public class Message {
-    private String time;
+    private Date time;
     private String text;
 
-    public Message(String time, String text) {
+    public Message(Date time, String text) {
         this.time = time;
         this.text = text;
     }
 
-    public String getTime() {
+    public Message(long milisec, String text) {
+        this.time = new Date(milisec);
+        this.text = text;
+    }
+
+    public Date getTime() {
         return time;
     }
 
