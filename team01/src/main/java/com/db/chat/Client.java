@@ -1,17 +1,18 @@
 package com.db.chat;
 
-import java.util.ArrayList;
-
 public class Client {
     private Server server;
+    private View view;
 
-    public Client(Server server) {
+    public Client(Server server, View view) {
         this.server = server;
+        this.view = view;
         server.connect(this);
     }
 
-    public ArrayList<Message> getHistory(){
-        return server.getHistory();
+    public int getHistory(){
+        view.displayHistory(server.getHistory());
+        return 0;
     }
 
     public int send(Message message) {
@@ -20,6 +21,7 @@ public class Client {
     }
 
     public int receive(Message message) {
+        view.display(message);
         return 0;
     }
 
