@@ -26,16 +26,18 @@ public class Server {
         this.send(message);
     }
 
-    public ArrayList<Client> getClients() {
-        return clients;
-    }
-
     void send(Message message) {
-
+        for (Client client : this.clients) {
+            client.receive(message);
+        }
     }
 
     public ArrayList<Message> getHistory() {
         return this.history.getHistory();
+    }
+
+    public ArrayList<Client> getClients() {
+        return clients;
     }
 
     public void connect(Client client) {
