@@ -1,9 +1,19 @@
 package com.db.chat;
 
-public class History {
-    private Message[] history;
+import java.util.ArrayList;
 
-    public Message[] getHistory() {
+public class History {
+    private ArrayList<Message> history;
+
+    public History() {
+        this.history = new ArrayList<>();
+    }
+
+    public History(ArrayList<Message> history) {
+        this.history = history;
+    }
+
+    public ArrayList<Message> getHistory() {
         return history;
     }
 }

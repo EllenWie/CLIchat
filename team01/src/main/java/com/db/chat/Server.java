@@ -1,5 +1,7 @@
 package com.db.chat;
 
+import java.util.ArrayList;
+
 public class Server {
     private History history;
 
@@ -15,7 +17,7 @@ public class Server {
 
     }
 
-    public Message[] getHistory() {
+    public ArrayList<Message> getHistory() {
 
         return history.getHistory();
     }
