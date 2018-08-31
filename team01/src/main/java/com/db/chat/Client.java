@@ -8,4 +8,5 @@ public class Client {
     public ArrayList<Message> getHistory(){
         return server.getHistory();
     }
+
 }
