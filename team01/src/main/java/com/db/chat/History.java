@@ -9,11 +9,15 @@ public class History {
         this.history = new ArrayList<>();
     }
 
-    public History(ArrayList<Message> history) {
-        this.history = history;
+    public History(History history) {
+        this.history = history.getHistory();
     }
 
     public ArrayList<Message> getHistory() {
         return history;
+    }
+
+    public void addMessage(Message message) {
+        history.add(message);
     }
 }
