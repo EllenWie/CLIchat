@@ -12,7 +12,7 @@ public class ServerTest {
     private Client mockClient;
     private Message mockMessage;
     private HistoryController mockHistory;
-/*
+
     @Before
     public void setup() {
         mockHistory = mock(HistoryController.class);
@@ -22,7 +22,7 @@ public class ServerTest {
     }
 
     @Test
-    public void shouldAddHistoryWhenServerReceive() throws HistoryControllerException {
+    public void shouldAddHistoryWhenServerReceive() throws HistoryException {
         server.receive(mockMessage);
 
         verify(mockHistory, times(1)).addMessage(mockMessage);
@@ -30,9 +30,9 @@ public class ServerTest {
 
     @Test
     public void shouldCallClientsReceiveWhenServerReceive() {
-        //server.connect(mockClient);
+        server.connect(mockClient);
         server.receive(mockMessage);
 
         verify(mockClient, times(1)).receive(mockMessage);
-    }*/
+    }
 }
