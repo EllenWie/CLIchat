@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +15,6 @@ public class Server implements ServerInterface{
     class MessageGetter implements Runnable {
         public void handle(String textMessage) {
             Message message = deserializeMessage(textMessage);
-            System.out.println("got message: "+message.getText());
             switch(message.getType()) {
                 case MESSAGE:
                     receive(message);
@@ -63,7 +59,7 @@ public class Server implements ServerInterface{
 
     public Server(History history) {
         this.history = history;
-        clients = new LinkedList<>();
+        clients = Collections.synchronizedList(new LinkedList<>());//new LinkedList<>();
         new Thread(new MessageGetter()).start();
     }
 
@@ -79,7 +75,6 @@ public class Server implements ServerInterface{
 
     public void send(Message message) {
         for (ClientSession client : this.clients) {
-            System.out.println("sending....");
             client.sendMessage(serializeMessage(message));
         }
     }
