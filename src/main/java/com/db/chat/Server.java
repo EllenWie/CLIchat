@@ -59,7 +59,7 @@ public class Server implements ServerInterface{
 
     public Server(HistoryController historyController) {
         this.historyController = historyController;
-        clients = Collections.synchronizedList(new LinkedList<>());//new LinkedList<>();
+        clients = Collections.synchronizedList(new LinkedList<>());
         new Thread(new MessageGetter()).start();
     }
 
