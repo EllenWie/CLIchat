@@ -38,7 +38,8 @@ public class History {
                 history.add(currentMessage);
             }
         } catch (ClassNotFoundException | IOException e) {
-            throw new HistoryException(e);
+            HistoryException currentHistoryException = new HistoryException("Couldn't get history", e);
+            throw currentHistoryException;
         }
         return history;
     }
