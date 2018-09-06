@@ -43,8 +43,8 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        socketThread.interrupt();
         viewThread.interrupt();
+        socketThread.interrupt();
     }
 
     public static void main(String[] args) {

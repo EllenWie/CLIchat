@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.Closeable;
 import java.io.IOException;
 
-public interface ServerInterface extends Closeable {
+public interface ServerInterface extends Closeable, Runnable {
     default String serializeMessage(Message message) {
         try {
             return new ObjectMapper().writeValueAsString(message);
@@ -18,6 +18,7 @@ public interface ServerInterface extends Closeable {
 
     default Message deserializeMessage(String textMessage) {
         try {
+            System.out.println("textmessage "+textMessage);
             return new ObjectMapper().readValue(textMessage, Message.class);
         } catch (IOException e) {
             System.out.println("deserialize error");

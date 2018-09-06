@@ -1,30 +1,69 @@
 package com.db.chat;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server implements ServerInterface{
     private History history;
-    private ArrayList<Client> clients;
+    private List<ClientSession> clients;
 
-    public Server() {
-        try {
-            history = new History();
-        } catch (HistoryException e) {
-            e.printStackTrace();
+    class MessageGetter implements Runnable {
+        public void handle(String textMessage) {
+            Message message = deserializeMessage(textMessage);
+            switch(message.getType()) {
+                case MESSAGE:
+                    receive(message);
+                    break;
+                case HISTORY:
+                    getHistory();
+                    break;
+                case ERROR:
+                    break;
+            }
         }
-        clients = new ArrayList<>();
+        @Override
+        public void run() {
+            ExecutorService pool = Executors.newFixedThreadPool(10);
+            while (!Thread.interrupted()) {
+                try {
+                    for (ClientSession client : clients) {
+                        if (client.isNewMessageAvailable()) {
+                            pool.execute(() -> {
+                                try {
+                                    handle(client.readMessage());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    }
+                } catch(ConcurrentModificationException e) {
+
+                } catch (Exception e) {
+                    System.out.println("unknown exception");
+                    e.printStackTrace();
+                }
+            }
+            pool.shutdownNow();
+        }
+    }
+
+    public Server() throws HistoryException {
+        this(new History());
     }
 
     public Server(History history) {
         this.history = history;
-        clients = new ArrayList<>();
-    }
-
-    public Server(History history, ArrayList<Client> clients) {
-        this.history = history;
-        this.clients = clients;
+        clients = new LinkedList<>();
+        new Thread(new MessageGetter()).start();
     }
 
     public void receive(Message message) {
@@ -38,22 +77,43 @@ public class Server implements ServerInterface{
     }
 
     public void send(Message message) {
-        for (Client client : this.clients) {
-            client.receive(message);
+        for (ClientSession client : this.clients) {
+            client.sendMessage(serializeMessage(message));
         }
     }
 
-    public ArrayList<Client> getClients() {
-        return clients;
-    }
-
-    //TODO: store sockets instead of Clients and do it in accept without function connect
-    public void connect(Client client) {
-        clients.add(client);
+    public void getHistory() {
+        try {
+            for (Message message : history.getHistory()) {
+                send(message);
+            }
+        } catch (HistoryException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void close() throws IOException {
         //TODO here would be closing of server... maybe
+    }
+
+    public void run() {
+        try (ServerSocket portListener = new ServerSocket(6666)) {
+            portListener.setSoTimeout(1000);
+            while (!Thread.interrupted()) {
+                try {
+                    Socket clientConnection = portListener.accept();
+                    clients.add(new ClientSession(clientConnection));
+                } catch (SocketTimeoutException e) {
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws HistoryException {
+        new Thread(new Server()).start();
     }
 }

@@ -30,7 +30,7 @@ public class ServerTest {
 
     @Test
     public void shouldCallClientsReceiveWhenServerReceive() {
-        server.connect(mockClient);
+        //server.connect(mockClient);
         server.receive(mockMessage);
 
         verify(mockClient, times(1)).receive(mockMessage);

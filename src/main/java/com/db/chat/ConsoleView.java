@@ -20,10 +20,10 @@ public class ConsoleView implements View {
         switch (type) {
             case "/snd ":
                 String text = currentMessage.substring(5);
-                client.send(new Message(null, text, Message.MessageType.MESSAGE));
+                client.send(new Message(null, text, MessageType.MESSAGE));
                 break;
             case "/hist":
-                client.send(new Message(null, null, Message.MessageType.HISTORY));
+                client.send(new Message(null, null, MessageType.HISTORY));
                 break;
             case "/quit":
                 client.quit();

@@ -3,10 +3,6 @@ package com.db.chat;
 import java.util.Date;
 
 public class Message {
-    public enum MessageType {
-        MESSAGE, HISTORY, ERROR
-    }
-
     private Date time;
     private String text;
     private MessageType type;
