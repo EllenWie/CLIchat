@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Message {
     private Date time;
-    private String text;
 
+    private String text;
     public Message(Date time, String text) {
         this.time = time;
         this.text = text;
@@ -18,6 +18,10 @@ public class Message {
 
     public Date getTime() {
         return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public String getText() {

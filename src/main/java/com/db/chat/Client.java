@@ -4,10 +4,16 @@ public class Client {
     private Server server;
     private View view;
 
+    public Client(Server server) {
+        this(server, new ConsoleView());
+    }
+
     public Client(Server server, View view) {
         this.server = server;
         this.view = view;
+        this.view.setClient(this);
         server.connect(this);
+        new Thread(this.view).start();
     }
 
     public int getHistory(){
@@ -25,4 +31,7 @@ public class Client {
         return 0;
     }
 
+    public void quit() {
+        Thread.currentThread().stop();
+    }
 }

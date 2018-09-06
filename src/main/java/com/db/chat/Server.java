@@ -1,6 +1,7 @@
 package com.db.chat;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Server {
     private History history;
@@ -22,6 +23,7 @@ public class Server {
     }
 
     public void receive(Message message) {
+        message.setTime(new Date());
         this.history.addMessage(message);
         this.send(message);
     }
