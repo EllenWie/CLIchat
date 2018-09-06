@@ -1,20 +1,21 @@
 package com.db.chat;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.*;
 
 import static java.util.concurrent.Executors.newCachedThreadPool;
 
 public class History {
-    private ArrayList<Message> history;
+    private List<Message> history;
     private ExecutorService pool = newCachedThreadPool();
     private final String historyFileName = "history.txt";
     private ObjectOutputStream historyWriter;
     private ObjectInputStream historyReader;
 
     public History() throws HistoryException {
-        this.history = new ArrayList<>();
+        this.history = new LinkedList<>();
         initIOStreams();
     }
 
@@ -23,7 +24,7 @@ public class History {
         initIOStreams();
     }
 
-    public ArrayList<Message> getHistory() throws HistoryException {
+    public List<Message> getHistory() throws HistoryException {
         Message currentMessage;
         try {
             while ((currentMessage = (Message) historyReader.readObject()) != null) {
