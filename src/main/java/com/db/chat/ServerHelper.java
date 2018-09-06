@@ -45,12 +45,20 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
 
     @Override
     public void send(Message message) {
-        client.receive(message);
+        switch (message.getType()) {
+            case MESSAGE:
+                client.receive(message);
+                break;
+            case HISTORY:
+                break;
+            case ERROR:
+                break;
+        }
     }
 
     @Override
     public void getHistory() {
-        out.println("/hist");
+        out.println(serializeMessage(new Message(null, null, Message.MessageType.HISTORY)));
         out.flush();
     }
 
