@@ -17,7 +17,7 @@ public class ClientViewTest {
     private Server server;
     private Message message;
     private Client client;
-
+/*
     @Before
     public void setup() {
         server = mock(Server.class);
@@ -34,5 +34,5 @@ public class ClientViewTest {
             }
         }).when(server).receive(message);
         client = new Client(server);
-    }
+    }*/
 }

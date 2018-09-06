@@ -12,7 +12,7 @@ public class ClientTest {
     private Server mockServer;
     private View mockView;
     private Message mockMessage;
-
+/*
     @Before
     public void setup() {
         mockServer = mock(Server.class);
@@ -38,11 +38,11 @@ public class ClientTest {
 
     @Test
     public void historyTest() {
-        /*ArrayList<Message> history = new ArrayList<Message>(1);
+        ArrayList<Message> history = new ArrayList<Message>(1);
         when(mockServer.getHistory()).thenReturn(history);
         client.getHistory();
 
         verify(mockServer, times(1)).getHistory();
-        verify(mockView, times(1)).displayHistory(history);*/
-    }
+        verify(mockView, times(1)).displayHistory(history);
+    }*/
 }

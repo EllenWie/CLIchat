@@ -12,7 +12,7 @@ public class ServerTest {
     private Client mockClient;
     private Message mockMessage;
     private HistoryController mockHistory;
-
+/*
     @Before
     public void setup() {
         mockHistory = mock(HistoryController.class);
@@ -34,5 +34,5 @@ public class ServerTest {
         server.receive(mockMessage);
 
         verify(mockClient, times(1)).receive(mockMessage);
-    }
+    }*/
 }
