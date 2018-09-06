@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server implements ServerInterface{
-    private HistoryController HistoryController;
+    private HistoryController historyController;
     private List<ClientSession> clients;
 
     class MessageGetter implements Runnable {
@@ -20,7 +20,7 @@ public class Server implements ServerInterface{
                     receive(message);
                     break;
                 case HISTORY:
-                    getHistoryController();
+                    getHistory();
                     break;
                 case ERROR:
                     break;
@@ -57,8 +57,8 @@ public class Server implements ServerInterface{
         this(new HistoryController());
     }
 
-    public Server(HistoryController HistoryController) {
-        this.HistoryController = HistoryController;
+    public Server(HistoryController historyController) {
+        this.historyController = historyController;
         clients = Collections.synchronizedList(new LinkedList<>());//new LinkedList<>();
         new Thread(new MessageGetter()).start();
     }
@@ -66,7 +66,7 @@ public class Server implements ServerInterface{
     public void receive(Message message) {
         message.setTime(new Date());
         try {
-            this.HistoryController.addMessage(message);
+            this.historyController.addMessage(message);
         } catch (HistoryControllerException e) {
             e.printStackTrace();
         }
@@ -79,9 +79,9 @@ public class Server implements ServerInterface{
         }
     }
 
-    public void getHistoryController() {
+    public void getHistory() {
         try {
-            for (Message message : HistoryController.getHistory()) {
+            for (Message message : historyController.getHistory()) {
                 send(message);
             }
         } catch (HistoryControllerException e) {
