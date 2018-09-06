@@ -33,7 +33,7 @@ public class Server implements ServerInterface{
                 try {
                     int i = 0;
                     for (ClientSession client : clients) {
-                        System.out.println(i++);
+//                        System.out.println(i++);
                         if (client.isNewMessageAvailable()) {
                             pool.execute(() -> {
                                 try {

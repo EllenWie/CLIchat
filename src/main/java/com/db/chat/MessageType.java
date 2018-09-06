@@ -1,5 +1,7 @@
 package com.db.chat;
 
-public enum MessageType {
+import java.io.Serializable;
+
+public enum MessageType implements Serializable {
     MESSAGE, HISTORY, ERROR
 }

@@ -30,13 +30,19 @@ public class HistoryController {
 
     public List<Message> getHistory() throws HistoryControllerException {
         Message currentMessage;
+        history.clear();
         try (ObjectInputStream historyReader =
                 new ObjectInputStream(
-                    new FileInputStream(new File(".", historyFileName))
-                )) {
+                    new FileInputStream(
+                            new File(".", historyFileName)
+                    )
+                )
+        ) {
             while ((currentMessage = (Message) historyReader.readObject()) != null) {
                 history.add(currentMessage);
             }
+        } catch (EOFException e) {
+            return history;
         } catch (ClassNotFoundException | IOException e) {
             throw new HistoryControllerException("Couldn't get history", e);
         }
@@ -49,6 +55,7 @@ public class HistoryController {
                 try {
                     historyWriter.writeObject(message);
                 } catch (IOException e) {
+                    e.printStackTrace();
                     return false;
                 }
                 return true;
