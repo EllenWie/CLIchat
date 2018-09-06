@@ -18,6 +18,7 @@ public class Server implements ServerInterface{
     class MessageGetter implements Runnable {
         public void handle(String textMessage) {
             Message message = deserializeMessage(textMessage);
+            System.out.println("got message: "+message.getText());
             switch(message.getType()) {
                 case MESSAGE:
                     receive(message);
@@ -78,6 +79,7 @@ public class Server implements ServerInterface{
 
     public void send(Message message) {
         for (ClientSession client : this.clients) {
+            System.out.println("sending....");
             client.sendMessage(serializeMessage(message));
         }
     }

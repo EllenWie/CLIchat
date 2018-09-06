@@ -22,6 +22,7 @@ public class ClientSession {
 
     public void sendMessage(String message) {
         out.println(message);
+        out.flush();
     }
 
     public String readMessage() throws IOException {

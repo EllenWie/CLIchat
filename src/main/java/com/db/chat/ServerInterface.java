@@ -18,7 +18,6 @@ public interface ServerInterface extends Closeable, Runnable {
 
     default Message deserializeMessage(String textMessage) {
         try {
-            System.out.println("textmessage "+textMessage);
             return new ObjectMapper().readValue(textMessage, Message.class);
         } catch (IOException e) {
             System.out.println("deserialize error");
