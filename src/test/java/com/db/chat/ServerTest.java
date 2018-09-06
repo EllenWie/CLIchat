@@ -17,7 +17,6 @@ public class ServerTest {
     public void setup() {
         mockHistory = mock(History.class);
         server = new Server(mockHistory);
-
         mockClient = mock(Client.class);
         mockMessage = mock(Message.class);
     }
