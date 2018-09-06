@@ -14,7 +14,6 @@ public class Client {
         this.server = server;
         this.view = view;
         this.view.setClient(this);
-        server.connect(this);
         new Thread(this.view).start();
     }
 

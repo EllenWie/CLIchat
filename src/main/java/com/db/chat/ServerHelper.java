@@ -4,7 +4,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ServerHelper implements ServerInterface, Runnable, Closeable {
     private Client client;
@@ -18,6 +17,16 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
             return mapper.writeValueAsString(message);
         } catch (IOException e) {
             System.out.println("serialize error");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Message deserializeMessage(String textMessage) {
+        try {
+            return mapper.readValue(textMessage, Message.class);
+        } catch (IOException e) {
+            System.out.println("deserialize error");
             e.printStackTrace();
             return null;
         }
@@ -55,6 +64,7 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
     @Override
     public void receive(Message message) {
         out.println(serializeMessage(message));
+        out.flush();
     }
 
     @Override
@@ -65,16 +75,19 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
     @Override
     public void getHistory() {
         out.println("/hist");
-    }
-
-    @Override
-    public void connect(Client client) {
-
+        out.flush();
     }
 
     @Override
     public void run() {
-        //while(true) receive message
+        while(!Thread.interrupted()) {
+            try {
+                String textMessage = in.readLine();
+                send(deserializeMessage(textMessage));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setClient(Client client) {

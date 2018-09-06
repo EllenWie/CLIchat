@@ -8,6 +8,4 @@ public interface ServerInterface {
     void send(Message message);
 
     public void getHistory();
-
-    public void connect(Client client);
 }

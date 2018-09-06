@@ -50,6 +50,7 @@ public class Server implements ServerInterface{
         return clients;
     }
 
+    //TODO: store sockets instead of Clients and do it in accept without function connect
     public void connect(Client client) {
         clients.add(client);
     }
