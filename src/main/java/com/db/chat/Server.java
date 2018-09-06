@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server implements ServerInterface{
-    private History history;
+    private HistoryController HistoryController;
     private List<ClientSession> clients;
 
     class MessageGetter implements Runnable {
@@ -20,7 +20,7 @@ public class Server implements ServerInterface{
                     receive(message);
                     break;
                 case HISTORY:
-                    getHistory();
+                    getHistoryController();
                     break;
                 case ERROR:
                     break;
@@ -53,12 +53,12 @@ public class Server implements ServerInterface{
         }
     }
 
-    public Server() throws HistoryException {
-        this(new History());
+    public Server() throws HistoryControllerException {
+        this(new HistoryController());
     }
 
-    public Server(History history) {
-        this.history = history;
+    public Server(HistoryController HistoryController) {
+        this.HistoryController = HistoryController;
         clients = Collections.synchronizedList(new LinkedList<>());//new LinkedList<>();
         new Thread(new MessageGetter()).start();
     }
@@ -66,8 +66,8 @@ public class Server implements ServerInterface{
     public void receive(Message message) {
         message.setTime(new Date());
         try {
-            this.history.addMessage(message);
-        } catch (HistoryException e) {
+            this.HistoryController.addMessage(message);
+        } catch (HistoryControllerException e) {
             e.printStackTrace();
         }
         this.send(message);
@@ -79,12 +79,12 @@ public class Server implements ServerInterface{
         }
     }
 
-    public void getHistory() {
+    public void getHistoryController() {
         try {
-            for (Message message : history.getHistory()) {
+            for (Message message : HistoryController.getHistory()) {
                 send(message);
             }
-        } catch (HistoryException e) {
+        } catch (HistoryControllerException e) {
             e.printStackTrace();
         }
     }
@@ -110,7 +110,7 @@ public class Server implements ServerInterface{
         }
     }
 
-    public static void main(String[] args) throws HistoryException {
+    public static void main(String[] args) throws HistoryControllerException {
         new Thread(new Server()).start();
     }
 }

@@ -2,20 +2,20 @@ package com.db.chat;
 
 import java.io.IOException;
 
-public class HistoryException extends Exception {
-    public HistoryException() {
+public class HistoryControllerException extends Exception {
+    public HistoryControllerException() {
         super();
     }
 
-    public HistoryException(String message) {
+    public HistoryControllerException(String message) {
         super(message);
     }
 
-    public HistoryException(String message, Throwable cause) {
+    public HistoryControllerException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public HistoryException(Throwable cause) {
+    public HistoryControllerException(Throwable cause) {
         super(cause);
     }
 

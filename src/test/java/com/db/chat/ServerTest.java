@@ -11,18 +11,18 @@ public class ServerTest {
     private Server server;
     private Client mockClient;
     private Message mockMessage;
-    private History mockHistory;
+    private HistoryController mockHistory;
 
     @Before
     public void setup() {
-        mockHistory = mock(History.class);
+        mockHistory = mock(HistoryController.class);
         server = new Server(mockHistory);
         mockClient = mock(Client.class);
         mockMessage = mock(Message.class);
     }
 
     @Test
-    public void shouldAddHistoryWhenServerReceive() throws HistoryException {
+    public void shouldAddHistoryWhenServerReceive() throws HistoryControllerException {
         server.receive(mockMessage);
 
         verify(mockHistory, times(1)).addMessage(mockMessage);
