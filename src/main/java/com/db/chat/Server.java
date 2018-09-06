@@ -31,7 +31,9 @@ public class Server implements ServerInterface{
             ExecutorService pool = Executors.newFixedThreadPool(10);
             while (!Thread.interrupted()) {
                 try {
+                    int i = 0;
                     for (ClientSession client : clients) {
+                        System.out.println(i++);
                         if (client.isNewMessageAvailable()) {
                             pool.execute(() -> {
                                 try {
@@ -64,6 +66,7 @@ public class Server implements ServerInterface{
     }
 
     public void receive(Message message) {
+        System.out.println("received message: "+ message.getText());
         message.setTime(new Date());
         try {
             this.historyController.addMessage(message);
@@ -71,12 +74,14 @@ public class Server implements ServerInterface{
             e.printStackTrace();
         }
         this.send(message);
+        System.out.println("sended to all (from receive)"+ message.getText());
     }
 
     public void send(Message message) {
         for (ClientSession client : this.clients) {
             client.sendMessage(serializeMessage(message));
         }
+        System.out.println("sended to all "+ message.getText());
     }
 
     public void getHistory() {

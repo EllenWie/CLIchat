@@ -27,7 +27,7 @@ public class Client {
     }
 
     public int send(Message message) {
-        if (message.getText().length() > 150) {
+        if (message.getType() == MessageType.MESSAGE && message.getText().length() > 150) {
             System.out.println("Error: Too long message");
         } else {
             server.receive(message);
