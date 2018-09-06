@@ -14,9 +14,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ClientViewTest {
-    Server server;
-    Message message;
-    Client client;
+    private Server server;
+    private Message message;
+    private Client client;
 
     @Before
     public void setup() {

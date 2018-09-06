@@ -3,12 +3,16 @@ package com.db.chat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Server {
+public class Server implements ServerInterface{
     private History history;
     private ArrayList<Client> clients;
 
     public Server() {
-        history = new History();
+        try {
+            history = new History();
+        } catch (HistoryException e) {
+            e.printStackTrace();
+        }
         clients = new ArrayList<>();
     }
 
@@ -24,18 +28,22 @@ public class Server {
 
     public void receive(Message message) {
         message.setTime(new Date());
-        this.history.addMessage(message);
+        try {
+            this.history.addMessage(message);
+        } catch (HistoryException e) {
+            e.printStackTrace();
+        }
         this.send(message);
     }
 
-    void send(Message message) {
+    public void send(Message message) {
         for (Client client : this.clients) {
             client.receive(message);
         }
     }
 
-    public ArrayList<Message> getHistory() {
-        return this.history.getHistory();
+    public void getHistory() {
+        //send(this.history.getHistory();)
     }
 
     public ArrayList<Client> getClients() {
