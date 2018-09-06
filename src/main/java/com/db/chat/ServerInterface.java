@@ -1,11 +1,33 @@
 package com.db.chat;
 
-import java.util.ArrayList;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
 
 public interface ServerInterface {
+    default String serializeMessage(Message message) {
+        try {
+            return new ObjectMapper().writeValueAsString(message);
+        } catch (IOException e) {
+            System.out.println("serialize error");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    default Message deserializeMessage(String textMessage) {
+        try {
+            return new ObjectMapper().readValue(textMessage, Message.class);
+        } catch (IOException e) {
+            System.out.println("deserialize error");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     void receive(Message message);
 
     void send(Message message);
 
-    public void getHistory();
+    void getHistory();
 }

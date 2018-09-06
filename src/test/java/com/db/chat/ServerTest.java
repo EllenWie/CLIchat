@@ -22,7 +22,7 @@ public class ServerTest {
     }
 
     @Test
-    public void shouldAddHistoryWhenServerReceive() {
+    public void shouldAddHistoryWhenServerReceive() throws HistoryException {
         server.receive(mockMessage);
 
         verify(mockHistory, times(1)).addMessage(mockMessage);

@@ -21,7 +21,7 @@ public class ConsoleView implements View {
         switch (type) {
             case "/snd ":
                 String text = currentMessage.substring(5);
-                Message message = new Message(null, text);
+                Message message = new Message(null, text, Message.MessageType.MESSAGE);
                 client.send(message);
                 break;
             case "/hist":
@@ -29,7 +29,7 @@ public class ConsoleView implements View {
                 break;
             case "/quit":
                 client.quit();
-                Thread.currentThread().stop();
+                Thread.currentThread().interrupt();
                 break;
             default:
                 System.out.println("wrong command");
