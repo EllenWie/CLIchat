@@ -19,10 +19,6 @@ public class HistoryException extends Exception {
         super(cause);
     }
 
-    protected HistoryException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
     @Override
     public String getMessage() {
         return super.getMessage();

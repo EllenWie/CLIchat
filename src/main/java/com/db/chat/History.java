@@ -2,7 +2,9 @@ package com.db.chat;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import static java.util.concurrent.Executors.newCachedThreadPool;
 
@@ -10,25 +12,47 @@ public class History {
     private ArrayList<Message> history;// = new ArrayList<>();
     private ExecutorService pool = newCachedThreadPool();
     private final String historyFileName = "history.txt";
-    private ObjectOutputStream historyWriter =
-            new ObjectOutputStream(
-                    new FileOutputStream(
-                            new File(".", historyFileName),
-                            true
-                    )
-            );
-    private ObjectInputStream historyReader =
-            new ObjectInputStream(
-                    new FileInputStream(new File(".", historyFileName))
-            );
+    private ObjectOutputStream historyWriter;
+    private ObjectInputStream historyReader;
 
-
-    public History() throws IOException {
+    public History() throws HistoryException {
         this.history = new ArrayList<>();
+        try {
+            historyWriter =
+                    new ObjectOutputStream(
+                            new FileOutputStream(
+                                    new File(".", historyFileName),
+                                    true
+                            )
+                    );
+
+            historyReader =
+                    new ObjectInputStream(
+                            new FileInputStream(new File(".", historyFileName))
+                    );
+        } catch (IOException e) {
+            throw new HistoryException("Couldn't init history", e);
+        }
     }
 
-    public History(History history) throws HistoryException, IOException {
+    public History(History history) throws HistoryException {
         this.history = history.getHistory();
+        try {
+            historyWriter =
+                    new ObjectOutputStream(
+                            new FileOutputStream(
+                                    new File(".", historyFileName),
+                                    true
+                            )
+                    );
+
+            historyReader =
+                    new ObjectInputStream(
+                            new FileInputStream(new File(".", historyFileName))
+                    );
+        } catch (IOException e) {
+            throw new HistoryException("Couldn't init history", e);
+        }
     }
 
     public ArrayList<Message> getHistory() throws HistoryException {
@@ -38,19 +62,31 @@ public class History {
                 history.add(currentMessage);
             }
         } catch (ClassNotFoundException | IOException e) {
-            HistoryException currentHistoryException = new HistoryException("Couldn't get history", e);
-            throw currentHistoryException;
+            throw new HistoryException("Couldn't get history", e);
         }
         return history;
     }
 
     public void addMessage(Message message) throws HistoryException {
-        pool.execute(() -> {
+        Future<Boolean> result = pool.submit(() -> {
             try {
                 historyWriter.writeObject(message);
             } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
+            return true;
         });
+        while (!result.isDone()) {
+            if (result.isCancelled()) {
+                throw new HistoryException("Could't add message");
+            }
+        }
+        try {
+            if (result.get()) {
+                return;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new HistoryException("Could't add message", e);
+        }
     }
 }
