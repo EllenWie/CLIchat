@@ -9,7 +9,7 @@ import java.util.concurrent.Future;
 import static java.util.concurrent.Executors.newCachedThreadPool;
 
 public class History {
-    private ArrayList<Message> history;// = new ArrayList<>();
+    private ArrayList<Message> history;
     private ExecutorService pool = newCachedThreadPool();
     private final String historyFileName = "history.txt";
     private ObjectOutputStream historyWriter;
@@ -17,42 +17,12 @@ public class History {
 
     public History() throws HistoryException {
         this.history = new ArrayList<>();
-        try {
-            historyWriter =
-                    new ObjectOutputStream(
-                            new FileOutputStream(
-                                    new File(".", historyFileName),
-                                    true
-                            )
-                    );
-
-            historyReader =
-                    new ObjectInputStream(
-                            new FileInputStream(new File(".", historyFileName))
-                    );
-        } catch (IOException e) {
-            throw new HistoryException("Couldn't init history", e);
-        }
+        initIOStreams();
     }
 
     public History(History history) throws HistoryException {
         this.history = history.getHistory();
-        try {
-            historyWriter =
-                    new ObjectOutputStream(
-                            new FileOutputStream(
-                                    new File(".", historyFileName),
-                                    true
-                            )
-                    );
-
-            historyReader =
-                    new ObjectInputStream(
-                            new FileInputStream(new File(".", historyFileName))
-                    );
-        } catch (IOException e) {
-            throw new HistoryException("Couldn't init history", e);
-        }
+        initIOStreams();
     }
 
     public ArrayList<Message> getHistory() throws HistoryException {
@@ -87,6 +57,25 @@ public class History {
             }
         } catch (InterruptedException | ExecutionException e) {
             throw new HistoryException("Could't add message", e);
+        }
+    }
+
+    private void initIOStreams() throws HistoryException {
+        try {
+            historyWriter =
+                    new ObjectOutputStream(
+                            new FileOutputStream(
+                                    new File(".", historyFileName),
+                                    true
+                            )
+                    );
+
+            historyReader =
+                    new ObjectInputStream(
+                            new FileInputStream(new File(".", historyFileName))
+                    );
+        } catch (IOException e) {
+            throw new HistoryException("Couldn't init history", e);
         }
     }
 }
