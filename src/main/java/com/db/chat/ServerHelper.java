@@ -41,8 +41,10 @@ public class ServerHelper implements ServerInterface {
 
     @Override
     public void receive(Message message) {
+        System.out.println("sending..." + message.getText());
         out.println(serializeMessage(message));
         out.flush();
+        System.out.println("sended.");
     }
 
     @Override
