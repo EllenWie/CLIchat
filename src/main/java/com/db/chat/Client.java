@@ -1,14 +1,16 @@
 package com.db.chat;
 
+import java.util.ArrayList;
+
 public class Client {
-    private Server server;
+    private ServerInterface server;
     private View view;
 
-    public Client(Server server) {
+    public Client(ServerInterface server) {
         this(server, new ConsoleView());
     }
 
-    public Client(Server server, View view) {
+    public Client(ServerInterface server, View view) {
         this.server = server;
         this.view = view;
         this.view.setClient(this);
@@ -17,7 +19,7 @@ public class Client {
     }
 
     public int getHistory(){
-        view.displayHistory(server.getHistory());
+        server.getHistory();
         return 0;
     }
 
@@ -34,4 +36,12 @@ public class Client {
     public void quit() {
         Thread.currentThread().stop();
     }
+
+    public static void main(String[] args) {
+        ServerHelper server = new ServerHelper("127.0.0.1", 6666);
+        Client client = new Client(server);
+        server.setClient(client);
+    }
+
+
 }
