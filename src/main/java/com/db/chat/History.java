@@ -2,9 +2,7 @@ package com.db.chat;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import static java.util.concurrent.Executors.newCachedThreadPool;
 
@@ -46,16 +44,11 @@ public class History {
             }
             return true;
         });
-        while (!result.isDone()) {
-            if (result.isCancelled()) {
-                throw new HistoryException("Could't add message");
-            }
-        }
         try {
-            if (result.get()) {
+            if (result.get(1000, TimeUnit.MILLISECONDS)) {
                 return;
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
             throw new HistoryException("Could't add message", e);
         }
     }
