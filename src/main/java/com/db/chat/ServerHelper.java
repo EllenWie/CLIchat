@@ -1,7 +1,5 @@
 package com.db.chat;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import java.io.*;
 import java.net.Socket;
 
@@ -10,27 +8,6 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private ObjectMapper mapper;
-
-    private String serializeMessage(Message message) {
-        try {
-            return mapper.writeValueAsString(message);
-        } catch (IOException e) {
-            System.out.println("serialize error");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private Message deserializeMessage(String textMessage) {
-        try {
-            return mapper.readValue(textMessage, Message.class);
-        } catch (IOException e) {
-            System.out.println("deserialize error");
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public ServerHelper(String host, int port) {
         try {
@@ -47,7 +24,6 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
             System.out.println("server helper constructor error");
             e.printStackTrace();
         }
-        mapper = new ObjectMapper();
     }
 
     public void close() {

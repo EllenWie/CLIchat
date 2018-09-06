@@ -3,17 +3,22 @@ package com.db.chat;
 import java.util.Date;
 
 public class Message {
+    public enum MessageType {
+        MESSAGE, HISTORY, ERROR
+    }
+    
     private Date time;
-
     private String text;
-    public Message(Date time, String text) {
+    private MessageType type;
+
+    public Message(Date time, String text, MessageType type) {
         this.time = time;
         this.text = text;
+        this.type = type;
     }
 
-    public Message(long milisec, String text) {
-        this.time = new Date(milisec);
-        this.text = text;
+    public Message(long milisec, String text, MessageType type) {
+        this(new Date(milisec), text, type);
     }
 
     public Date getTime() {
@@ -26,6 +31,10 @@ public class Message {
 
     public String getText() {
         return text;
+    }
+
+    public MessageType getType() {
+        return type;
     }
 
     @Override
