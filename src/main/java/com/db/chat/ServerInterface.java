@@ -2,9 +2,10 @@ package com.db.chat;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.Closeable;
 import java.io.IOException;
 
-public interface ServerInterface {
+public interface ServerInterface extends Closeable {
     default String serializeMessage(Message message) {
         try {
             return new ObjectMapper().writeValueAsString(message);
@@ -28,6 +29,4 @@ public interface ServerInterface {
     void receive(Message message);
 
     void send(Message message);
-
-    void getHistory();
 }

@@ -1,10 +1,15 @@
 package com.db.chat;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 public class Client {
     private ServerInterface server;
     private View view;
+    private Thread viewThread, socketThread;
+
+    public Client() {
+        this(new ServerHelper("127.0.0.1", 6666));
+    }
 
     public Client(ServerInterface server) {
         this(server, new ConsoleView());
@@ -14,12 +19,11 @@ public class Client {
         this.server = server;
         this.view = view;
         this.view.setClient(this);
-        new Thread(this.view).start();
-    }
-
-    public int getHistory(){
-        server.getHistory();
-        return 0;
+        viewThread = new Thread(this.view);
+        viewThread.start();
+        ((ServerHelper)this.server).setClient(this);
+        socketThread = new Thread((ServerHelper)this.server);
+        socketThread.start();
     }
 
     public int send(Message message) {
@@ -33,13 +37,18 @@ public class Client {
     }
 
     public void quit() {
-        Thread.currentThread().stop();
+        System.out.println("client got quit message");
+        try {
+            server.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        socketThread.interrupt();
+        viewThread.interrupt();
     }
 
     public static void main(String[] args) {
-        ServerHelper server = new ServerHelper("127.0.0.1", 6666);
-        Client client = new Client(server);
-        server.setClient(client);
+        Client client = new Client();
     }
 
 

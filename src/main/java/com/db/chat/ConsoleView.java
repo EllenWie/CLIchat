@@ -4,11 +4,10 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConsoleView implements View {
-    private String currentMessage;
     private Client client;
 
     public void setClient(Client client) {
@@ -16,20 +15,18 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void send() {
+    public void send(String currentMessage) {
         String type = currentMessage.substring(0, 5);
         switch (type) {
             case "/snd ":
                 String text = currentMessage.substring(5);
-                Message message = new Message(null, text, Message.MessageType.MESSAGE);
-                client.send(message);
+                client.send(new Message(null, text, Message.MessageType.MESSAGE));
                 break;
             case "/hist":
-                client.getHistory();
+                client.send(new Message(null, null, Message.MessageType.HISTORY));
                 break;
             case "/quit":
                 client.quit();
-                Thread.currentThread().interrupt();
                 break;
             default:
                 System.out.println("wrong command");
@@ -38,55 +35,26 @@ public class ConsoleView implements View {
 
     @Override
     public void display(Message message) {
-        System.out.println(message.getTime().toString() + System.lineSeparator() + message.getText());
-    }
-
-    @Override
-    public void displayHistory(ArrayList<Message> history) {
-        for (Message message : history) {
-            display(message);
-        }
+        System.out.println(message.getTime().toString() + System.lineSeparator()
+                + message.getText() + System.lineSeparator());
     }
 
     @Override
     public void run() {
+        ExecutorService pool = Executors.newFixedThreadPool(2);
         try (BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
                         new BufferedInputStream(System.in)))) {
             while (!Thread.interrupted()) {
-                currentMessage = bufferedReader.readLine();
-                send();
+                String currentMessage = bufferedReader.readLine();
+                pool.execute(() -> {
+                    send(currentMessage);
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        //new ConsoleView().run();
-        /*new Thread(() -> {
-            try (BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(
-                            new BufferedInputStream(System.in)))) {
-                while (!Thread.interrupted()) {
-                    System.out.println(">>>>>"+ bufferedReader.readLine());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        new Thread(() -> {
-            while(!Thread.interrupted()) {
-                System.out.println("1111");
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-*/
+        pool.shutdownNow();
+        System.out.println("consoleview finished");
     }
 }

@@ -1,5 +1,6 @@
 package com.db.chat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -42,10 +43,6 @@ public class Server implements ServerInterface{
         }
     }
 
-    public void getHistory() {
-        //send(this.history.getHistory();)
-    }
-
     public ArrayList<Client> getClients() {
         return clients;
     }
@@ -53,5 +50,10 @@ public class Server implements ServerInterface{
     //TODO: store sockets instead of Clients and do it in accept without function connect
     public void connect(Client client) {
         clients.add(client);
+    }
+
+    @Override
+    public void close() throws IOException {
+        //TODO here would be closing of server... maybe
     }
 }

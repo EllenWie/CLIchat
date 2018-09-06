@@ -2,8 +2,10 @@ package com.db.chat;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class ServerHelper implements ServerInterface, Runnable, Closeable {
+public class ServerHelper implements ServerInterface, Runnable {
     private Client client;
     private Socket socket;
     private PrintWriter out;
@@ -57,21 +59,20 @@ public class ServerHelper implements ServerInterface, Runnable, Closeable {
     }
 
     @Override
-    public void getHistory() {
-        out.println(serializeMessage(new Message(null, null, Message.MessageType.HISTORY)));
-        out.flush();
-    }
-
-    @Override
     public void run() {
+        ExecutorService pool = Executors.newFixedThreadPool(2);
         while(!Thread.interrupted()) {
             try {
                 String textMessage = in.readLine();
-                send(deserializeMessage(textMessage));
+                pool.execute(() -> {
+                    send(deserializeMessage(textMessage));
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        pool.shutdownNow();
+        System.out.println("serverhelper finished");
     }
 
     public void setClient(Client client) {
