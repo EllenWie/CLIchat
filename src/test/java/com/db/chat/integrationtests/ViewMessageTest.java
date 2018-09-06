@@ -6,11 +6,12 @@ import com.db.chat.MessageType;
 import org.junit.Test;
 
 public class ViewMessageTest {
+    /*
     @Test
     public void shouldDisplayMessageContentWhenInvokeDisplay() {
         Message message = new Message(System.currentTimeMillis(), "Hello", MessageType.MESSAGE);
         ConsoleView consoleView = new ConsoleView();
         consoleView.display(message);
     }
-
+*/
 }
