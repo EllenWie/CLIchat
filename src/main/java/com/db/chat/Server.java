@@ -36,17 +36,24 @@ public class Server implements ServerInterface{
                     for (ClientSession client : clients) {
                         System.out.println(i++);
                         //TODO: doublechecking!!!!!!!
-                        if (client.isNewMessageAvailable()) {
-                            pool.execute(() -> {
-                                try {
-                                    handle(client.readMessage());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                        //if (client.isNewMessageAvailable()) {
+                            if (client.lock.tryLock()) {
+                                if (client.isNewMessageAvailable()) {
+                                    pool.execute(() -> {
+                                        try {
+                                            handle(client.readMessage());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        System.out.println("thread finished");
+                                    });
+                                    System.out.println("pool execute finished");
+                                } else {
+                                    System.out.println("synched but not available");
                                 }
-                                System.out.println("thread finished");
-                            });
-                            System.out.println("pool execute finished");
-                        }
+                                client.lock.unlock();
+                            }
+                        //}
                     }
                 } catch(ConcurrentModificationException e) {
                     System.out.println("beda");
