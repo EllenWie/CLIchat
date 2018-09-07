@@ -47,15 +47,7 @@ public class ServerHelper implements ServerInterface {
 
     @Override
     public void send(Message message) {
-        switch (message.getType()) {
-            case MESSAGE:
-                client.receive(message);
-                break;
-            case HISTORY:
-                break;
-            case ERROR:
-                break;
-        }
+        client.receive(message);
     }
 
     @Override
