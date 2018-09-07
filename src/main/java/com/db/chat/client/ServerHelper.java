@@ -6,6 +6,7 @@ import com.db.chat.core.MessageType;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,9 +27,10 @@ public class ServerHelper implements Chat {
                     new InputStreamReader(
                             new BufferedInputStream(
                                     socket.getInputStream())));
-        } catch (Exception e) {
-            //client.receive(new Message(null, "Can't connect to server", MessageType.ERROR));
+        } catch (UnknownHostException e) {
             System.out.println("Error: Can't connect to server" + System.lineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
