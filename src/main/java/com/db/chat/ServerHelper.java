@@ -23,7 +23,6 @@ public class ServerHelper implements ServerInterface {
                             new BufferedInputStream(
                                     socket.getInputStream())));
         } catch (Exception e) {
-            System.out.println("server helper constructor error");
             e.printStackTrace();
         }
     }
@@ -34,7 +33,6 @@ public class ServerHelper implements ServerInterface {
             out.close();
             socket.close();
         } catch (Exception e) {
-            System.out.println("close exception");
             e.printStackTrace();
         }
     }
@@ -64,7 +62,6 @@ public class ServerHelper implements ServerInterface {
             }
         }
         pool.shutdownNow();
-        System.out.println("serverhelper finished");
     }
 
     public void setClient(Client client) {

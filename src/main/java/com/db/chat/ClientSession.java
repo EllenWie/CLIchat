@@ -31,22 +31,17 @@ public class ClientSession {
 
     public String readMessage() throws IOException {
         lock.lock();
-        // {
         String s = in.readLine();
-        System.out.println("readed message: " + s);
         lock.unlock();
         return s;
-        //}
     }
 
     public boolean isNewMessageAvailable() {
-        //synchronized (this) {
-            try {
-                return in.ready();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        //}
+        try {
+            return in.ready();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
