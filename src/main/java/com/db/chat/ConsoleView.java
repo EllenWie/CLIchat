@@ -56,7 +56,6 @@ public class ConsoleView implements View {
                 if ("/quit".equals(currentMessage.split(" ", 2)[0])) {
                     client.quit();
                 } else {
-                    System.out.println("not quit");
                     pool.execute(() -> {
                         send(currentMessage);
                     });

@@ -11,12 +11,19 @@ import static java.lang.Thread.currentThread;
 public class HistoryController {
     private List<Message> history;
     private BlockingQueue<Callable<Boolean>> taskQueue = new LinkedBlockingQueue<>();
-    private final String historyFileName = "history.txt";
+    private String historyFileName = "history.txt";
     private ObjectOutputStream historyWriter;
     private ExecutorService singleThread = Executors.newSingleThreadExecutor();
     private List<Future<Boolean>> threadResults = new LinkedList<>();
 
     public HistoryController() throws HistoryControllerException {
+        this.history = new LinkedList<>();
+        initOutputStream();
+        runThreadWaitingForWritingTasks();
+    }
+
+    public HistoryController(String historyFileName) throws HistoryControllerException {
+        this.historyFileName = historyFileName;
         this.history = new LinkedList<>();
         initOutputStream();
         runThreadWaitingForWritingTasks();
