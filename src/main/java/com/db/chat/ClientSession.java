@@ -2,6 +2,8 @@ package com.db.chat;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,9 +33,14 @@ public class ClientSession {
 
     public String readMessage() throws IOException {
         lock.lock();
-        String s = in.readLine();
+        String readLine = null;
+        try {
+            readLine = in.readLine();
+        } catch (SocketException e) {
+            System.out.println("could not read message");
+        }
         lock.unlock();
-        return s;
+        return readLine;
     }
 
     public boolean isNewMessageAvailable() {
