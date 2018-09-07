@@ -30,6 +30,12 @@ public class ServerHelper implements Chat {
     transient private PrintWriter out;
     transient private BufferedReader in;
 
+    /**
+     * Constructor needs to get host name
+     * and port on host where application is running
+     * @param host
+     * @param port
+     */
     public ServerHelper(String host, int port) {
         try {
             socket = new Socket(host, port);
@@ -58,6 +64,8 @@ public class ServerHelper implements Chat {
 
     /**
      * closes connection to server
+     * and closes all buffers to
+     * finalize app correctly
      */
     @Override
     public void close() {
@@ -108,6 +116,9 @@ public class ServerHelper implements Chat {
      * it listens incoming messages from socket
      * and executes tasks to handle new message
      * in its fixed thread pool.
+     * pool is used because of the small
+     * size of tasks to mitigate costs
+     * on creating new thread every time.
      */
     @Override
     public void run() {
@@ -129,6 +140,8 @@ public class ServerHelper implements Chat {
 
     /**
      * assigns client to serverHelper object
+     * it's neceserry to invoke client's method
+     * when new message received.
      * @param client
      */
     public void setClient(Client client) {
