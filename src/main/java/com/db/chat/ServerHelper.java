@@ -36,6 +36,9 @@ public class ServerHelper implements Chat {
             socket.close();
             in.close();
             out.close();
+            socket = null;
+            in = null;
+            out = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
