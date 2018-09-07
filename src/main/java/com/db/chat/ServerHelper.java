@@ -58,7 +58,9 @@ public class ServerHelper implements Chat {
                     send(deserializeMessage(textMessage));
                 });
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("server is down");
+                Thread.currentThread().interrupt();
             }
         }
         pool.shutdownNow();
