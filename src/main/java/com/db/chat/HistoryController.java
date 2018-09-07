@@ -54,6 +54,7 @@ public class HistoryController {
             taskQueue.put(() -> {
                 try {
                     historyWriter.writeObject(message);
+                    historyWriter.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                     return false;
