@@ -34,7 +34,7 @@ public class HistoryController {
     public HistoryController(HistoryController history) throws HistoryControllerException {
         this.history = history.getHistory();
         initOutputStream();
-        new Thread(this::runThreadWaitingForWritingTasks);
+        runThreadWaitingForWritingTasks();
     }
 
     public List<Message> getHistory() throws HistoryControllerException {
