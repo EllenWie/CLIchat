@@ -11,6 +11,9 @@ import java.io.IOException;
 /**
  * Client class is main client application.
  * It can send messages to server and receive from it.
+ * To start application run main function.
+ * You should pass correct server address to Client constructor.
+ * After creation run start() method
  */
 public class Client {
     transient private Chat server;
@@ -39,7 +42,8 @@ public class Client {
     }
 
     /**
-     * @return user's nick
+     * returns user's nick
+     * @return nick
      */
     public String getNick() {
         return nick;
@@ -54,7 +58,9 @@ public class Client {
     }
 
     /**
-     * sends message object to server (through helper)
+     * sends message object to server.
+     * Calls serverHelper's method to do it.
+     * serverHelper takes responsibility for network
      * @param message
      * @return
      */
@@ -79,6 +85,7 @@ public class Client {
 
     /**
      * start this method after creating Client object to run all needed threads
+     * use this function right after creation client object
      */
     public void start() {
         if (((ServerHelper)this.server).isConnected()) {
@@ -89,6 +96,8 @@ public class Client {
 
     /**
      * shut down of client application
+     * interrupts its threads to finish them correctly
+     * use this function when correct shutdown needed
      */
     public void quit() {
         try {
@@ -102,6 +111,10 @@ public class Client {
 
     /**
      * Enter point to client application
+     * Client object creates and starts
+     * Pass correct arguments to constructor
+     * host - server's host
+     * port - port of application on server's host
      * @param args
      */
     public static void main(String... args) {
