@@ -23,7 +23,8 @@ public class ServerHelper implements Chat {
                             new BufferedInputStream(
                                     socket.getInputStream())));
         } catch (Exception e) {
-            System.out.println("Can't connect to server");
+            //client.receive(new Message(null, "Can't connect to server", MessageType.ERROR));
+            System.out.println("Error: Can't connect to server" + System.lineSeparator());
         }
     }
 
@@ -39,6 +40,7 @@ public class ServerHelper implements Chat {
             socket = null;
             in = null;
             out = null;
+        } catch (NullPointerException e) {
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +52,7 @@ public class ServerHelper implements Chat {
             out.println(serializeMessage(message));
             out.flush();
         } catch (NullPointerException e) {
-            System.out.println("Have no connection to server");
+            client.receive(new Message(null, "Have no connection to server", MessageType.ERROR));
         }
     }
 
@@ -69,7 +71,7 @@ public class ServerHelper implements Chat {
                     send(deserializeMessage(textMessage));
                 });
             } catch (IOException e) {
-                System.out.println("server is down");
+                client.receive(new Message(null, "Server is down", MessageType.ERROR));
                 Thread.currentThread().interrupt();
             }
         }

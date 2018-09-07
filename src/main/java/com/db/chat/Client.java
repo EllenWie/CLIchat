@@ -31,7 +31,7 @@ public class Client {
 
     public int send(Message message) {
         if (message.getType() == MessageType.MESSAGE && message.getText().length() > inputConstraint) {
-            System.out.println("Error: Too long message");
+            view.display(new Message(null, "Too long message", MessageType.ERROR));
         } else {
             server.receive(message);
         }
