@@ -33,27 +33,27 @@ public class Server implements Chat {
             ExecutorService pool = Executors.newFixedThreadPool(10);
             while (!Thread.interrupted()) {
                 try {
-                    for (ClientSession client : clients) {
-                        if (client.lock.tryLock()) {
-                            if (client.isNewMessageAvailable()) {
-                                pool.execute(() -> {
-                                    try {
-                                        handle(client, client.readMessage());
-                                    } catch (NullPointerException e) {
-                                        clients.remove(client);
-                                    } catch (IOException e) {
-                                        System.out.println("io exception");
-                                        e.printStackTrace();
-                                    }
-                                });
+                    if (clients != null) {
+                        for (ClientSession client : clients) {
+                            if (client.lock.tryLock()) {
+                                if (client.isNewMessageAvailable()) {
+                                    pool.execute(() -> {
+                                        try {
+                                            handle(client, client.readMessage());
+                                        } catch (NullPointerException e) {
+                                            clients.remove(client);
+                                        } catch (IOException e) {
+                                            System.out.println("io exception");
+                                            e.printStackTrace();
+                                        }
+                                    });
+                                }
+                                client.lock.unlock();
                             }
-                            client.lock.unlock();
                         }
                     }
                 } catch(ConcurrentModificationException e) {
-                } catch (NullPointerException e) {
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    continue;
                 }
             }
             pool.shutdownNow();
