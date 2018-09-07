@@ -21,9 +21,11 @@ public class Client {
         this.view.setClient(this);
         viewThread = new Thread(this.view);
         viewThread.start();
-        ((ServerHelper)this.server).setClient(this);
-        socketThread = new Thread((ServerHelper)this.server);
-        socketThread.start();
+        if (((ServerHelper)this.server).isConnected()) {
+            ((ServerHelper) this.server).setClient(this);
+            socketThread = new Thread((ServerHelper) this.server);
+            socketThread.start();
+        }
     }
 
     public int send(Message message) {
