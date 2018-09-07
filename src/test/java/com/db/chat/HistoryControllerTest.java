@@ -41,20 +41,21 @@ public class HistoryControllerTest {
         assertEquals(testMessage.getNick(), actualMessage.getNick());
     }
 
+    @Ignore
     @Test
     public void shouldNotThrowExceptionWhenTwoThousandClients() throws HistoryControllerException, IOException, InterruptedException {
         Server testServer = new Server();
         new Thread(()->testServer.run()).start();
 //        testServer.run();
         Client myClient = new Client("127.0.0.1", 6666);
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 100; ++i) {
 //            for (int j = 0; j < 2; ++j) {
             myClient.send(new Message(new Date(), String.valueOf(i), MessageType.MESSAGE, String.valueOf(i)));
 //            }
 
         }
         myClient.quit();
-        sleep(5000);
+        sleep(10000);
         testServer.close();
     }
 }
