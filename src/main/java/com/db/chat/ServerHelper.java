@@ -23,8 +23,12 @@ public class ServerHelper implements Chat {
                             new BufferedInputStream(
                                     socket.getInputStream())));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Can't connect to server");
         }
+    }
+
+    public boolean isConnected() {
+        return (socket != null);
     }
 
     public void close() {
@@ -32,6 +36,9 @@ public class ServerHelper implements Chat {
             socket.close();
             in.close();
             out.close();
+            socket = null;
+            in = null;
+            out = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,8 +46,12 @@ public class ServerHelper implements Chat {
 
     @Override
     public void receive(Message message) {
-        out.println(serializeMessage(message));
-        out.flush();
+        try {
+            out.println(serializeMessage(message));
+            out.flush();
+        } catch (NullPointerException e) {
+            System.out.println("Have no connection to server");
+        }
     }
 
     @Override
