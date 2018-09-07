@@ -3,6 +3,7 @@ package com.db.chat.server.history;
 import com.db.chat.core.Message;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -51,11 +52,11 @@ public class HistoryController {
                 history.add(currentMessage);
             }
         } catch (EOFException e) {
-            return history;
+            return new LinkedList<>(history);
         } catch (ClassNotFoundException | IOException e) {
             throw new HistoryControllerException("Couldn't get history", e);
         }
-        return history;
+        return new LinkedList<>(history);
     }
 
     public void addMessage(Message message) throws HistoryControllerException {
