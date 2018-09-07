@@ -30,13 +30,13 @@ public class ServerTest {
         verify(mockHistory, times(1)).addMessage(mockMessage);
     }
 
-    @Test
-    public void shouldCallClientsReceiveWhenServerReceive() {
-        //server.connect(mockClient);
-        server.receive(mockMessage);
-
-        verify(server, times(1)).send(mockMessage);
-    }
+//    @Test
+//    public void shouldCallClientsReceiveWhenServerReceive() {
+//        //server.connect(mockClient);
+//        server.receive(mockMessage);
+//
+//        verify(server, times(1)).send(mockMessage);
+//    }
 
 //    public void shouldGetHistoryWhenInvokeMethod() {
 //        server.getHistory(mockClientSession);
