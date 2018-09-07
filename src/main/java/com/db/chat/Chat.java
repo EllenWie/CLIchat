@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.Closeable;
 import java.io.IOException;
 
-public interface ServerInterface extends Closeable, Runnable {
+public interface Chat extends Closeable, Runnable {
     default String serializeMessage(Message message) {
         try {
             return new ObjectMapper().writeValueAsString(message);

@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server implements ServerInterface{
+public class Server implements Chat {
     private HistoryController historyController;
     private volatile List<ClientSession> clients;
 

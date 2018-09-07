@@ -3,7 +3,7 @@ package com.db.chat;
 import java.io.IOException;
 
 public class Client {
-    private ServerInterface server;
+    private Chat server;
     private View view;
     private Thread viewThread, socketThread;
 
@@ -11,11 +11,11 @@ public class Client {
         this(new ServerHelper("127.0.0.1", 6666));
     }
 
-    public Client(ServerInterface server) {
+    public Client(Chat server) {
         this(server, new ConsoleView());
     }
 
-    public Client(ServerInterface server, View view) {
+    public Client(Chat server, View view) {
         this.server = server;
         this.view = view;
         this.view.setClient(this);
