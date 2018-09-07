@@ -4,17 +4,31 @@ import com.db.chat.core.Chat;
 import com.db.chat.core.Message;
 import com.db.chat.core.MessageType;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * ServerHelper class is needed
+ * to make client more easy to understand.
+ * All network is encapsulated in this class.
+ * Its objects create connection to server.
+ * Has function to read from socket by lines
+ * and to write to socket by lines.
+ */
 public class ServerHelper implements Chat {
-    private Client client;
-    private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    transient private Client client;
+    transient private Socket socket;
+    transient private PrintWriter out;
+    transient private BufferedReader in;
 
     public ServerHelper(String host, int port) {
         try {
@@ -34,10 +48,18 @@ public class ServerHelper implements Chat {
         }
     }
 
+    /**
+     * return if socket was not set up
+     * @return
+     */
     public boolean isConnected() {
-        return (socket != null);
+        return socket != null;
     }
 
+    /**
+     * closes connection to server
+     */
+    @Override
     public void close() {
         try {
             if (socket != null) {
@@ -57,30 +79,45 @@ public class ServerHelper implements Chat {
         }
     }
 
+    /**
+     * this function immitates server's receive message
+     * to make client's methods work as if it is real server.
+     * after getting message it sends it throug socket
+     * @param message
+     */
     @Override
     public void receive(Message message) {
-        try {
+        if (out != null) {
             out.println(serializeMessage(message));
             out.flush();
-        } catch (NullPointerException e) {
-            client.receive(new Message(null, "Have no connection to server", MessageType.ERROR, client.getNick()));
         }
     }
 
+    /**
+     * this methods invokes when message has been received from socket
+     * and calls clients receive method.
+     * @param message
+     */
     @Override
     public void send(Message message) {
         client.receive(message);
     }
 
+    /**
+     * Main cycle of serverHelper program.
+     * it listens incoming messages from socket
+     * and executes tasks to handle new message
+     * in its fixed thread pool.
+     */
     @Override
     public void run() {
         ExecutorService pool = Executors.newFixedThreadPool(2);
         while(!Thread.interrupted()) {
             try {
                 String textMessage = in.readLine();
-                pool.execute(() -> {
-                    send(deserializeMessage(textMessage));
-                });
+                pool.execute(() ->
+                    send(deserializeMessage(textMessage))
+                );
             } catch (IOException e) {
                 client.receive(new Message(null, "Server is down", MessageType.ERROR, client.getNick()));
                 Thread.currentThread().interrupt();
@@ -90,6 +127,10 @@ public class ServerHelper implements Chat {
         close();
     }
 
+    /**
+     * assigns client to serverHelper object
+     * @param client
+     */
     public void setClient(Client client) {
         this.client = client;
     }
