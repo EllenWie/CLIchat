@@ -29,9 +29,9 @@ public class ServerHelper implements Chat {
 
     public void close() {
         try {
+            socket.close();
             in.close();
             out.close();
-            socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,7 +58,6 @@ public class ServerHelper implements Chat {
                     send(deserializeMessage(textMessage));
                 });
             } catch (IOException e) {
-                //e.printStackTrace();
                 System.out.println("server is down");
                 Thread.currentThread().interrupt();
             }

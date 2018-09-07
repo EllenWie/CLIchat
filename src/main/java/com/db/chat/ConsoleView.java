@@ -34,9 +34,6 @@ public class ConsoleView implements View {
             case "/hist":
                 client.send(new Message(null, null, MessageType.HISTORY));
                 break;
-            case "/quit":
-                client.quit();
-                break;
             default:
                 System.out.println("wrong command");
         }
@@ -56,9 +53,14 @@ public class ConsoleView implements View {
                         new BufferedInputStream(System.in)))) {
             while (!Thread.interrupted()) {
                 String currentMessage = bufferedReader.readLine();
-                pool.execute(() -> {
-                    send(currentMessage);
-                });
+                if ("/quit".equals(currentMessage.split(" ", 2)[0])) {
+                    client.quit();
+                } else {
+                    System.out.println("not quit");
+                    pool.execute(() -> {
+                        send(currentMessage);
+                    });
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
