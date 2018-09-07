@@ -1,4 +1,10 @@
-package com.db.chat;
+package com.db.chat.client;
+
+import com.db.chat.client.view.ConsoleView;
+import com.db.chat.client.view.View;
+import com.db.chat.core.Chat;
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
 
 import java.io.IOException;
 
@@ -7,6 +13,7 @@ public class Client {
     private View view;
     private Thread viewThread, socketThread;
     private static final int inputConstraint = 150;
+    private String nick;
 
     public Client() {
         this(new ServerHelper("127.0.0.1", 6666));
@@ -27,9 +34,17 @@ public class Client {
         }
     }
 
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
     public int send(Message message) {
         if (message.getType() == MessageType.MESSAGE && message.getText().length() > inputConstraint) {
-            view.display(new Message(null, "Too long message", MessageType.ERROR));
+            view.display(new Message(null, "Too long message", MessageType.ERROR, nick));
         } else {
             server.receive(message);
         }

@@ -1,12 +1,12 @@
 package com.db.chat;
 
-import org.junit.Assert;
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
 
-import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertEquals;
 
 public class MessageTest {
@@ -15,7 +15,8 @@ public class MessageTest {
 
     @Before
     public void setup() {
-        message = new Message(Long.MIN_VALUE, "THIS", MessageType.MESSAGE);
+        //TODO: nick added. if necesery, set nick and check
+        message = new Message(Long.MIN_VALUE, "THIS", MessageType.MESSAGE, null);
         minDate = new Date(Long.MIN_VALUE);
     }
 

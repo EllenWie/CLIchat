@@ -1,11 +1,12 @@
 package com.db.chat;
 
+import com.db.chat.client.Client;
+import com.db.chat.client.ServerHelper;
+import com.db.chat.client.view.View;
+import com.db.chat.core.Chat;
+import com.db.chat.core.Message;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 

@@ -1,7 +1,12 @@
-package com.db.chat;
+package com.db.chat.client;
+
+import com.db.chat.core.Chat;
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,9 +27,10 @@ public class ServerHelper implements Chat {
                     new InputStreamReader(
                             new BufferedInputStream(
                                     socket.getInputStream())));
-        } catch (Exception e) {
-            //client.receive(new Message(null, "Can't connect to server", MessageType.ERROR));
+        } catch (UnknownHostException e) {
             System.out.println("Error: Can't connect to server" + System.lineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -57,7 +63,7 @@ public class ServerHelper implements Chat {
             out.println(serializeMessage(message));
             out.flush();
         } catch (NullPointerException e) {
-            client.receive(new Message(null, "Have no connection to server", MessageType.ERROR));
+            client.receive(new Message(null, "Have no connection to server", MessageType.ERROR, client.getNick()));
         }
     }
 
@@ -76,7 +82,7 @@ public class ServerHelper implements Chat {
                     send(deserializeMessage(textMessage));
                 });
             } catch (IOException e) {
-                client.receive(new Message(null, "Server is down", MessageType.ERROR));
+                client.receive(new Message(null, "Server is down", MessageType.ERROR, client.getNick()));
                 Thread.currentThread().interrupt();
             }
         }

@@ -1,9 +1,9 @@
 package com.db.chat.integrationtests;
 
-import com.db.chat.Client;
-import com.db.chat.ConsoleView;
-import com.db.chat.Message;
-import com.db.chat.MessageType;
+import com.db.chat.client.Client;
+import com.db.chat.client.view.ConsoleView;
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +15,6 @@ import static java.lang.System.currentTimeMillis;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 
@@ -42,7 +41,8 @@ public class ViewMessageTest {
 
     @Test
     public void shouldDisplayMessageContentWhenInvokeDisplay() {
-        Message message = new Message(currentTimeMillis(), "Hello", MessageType.MESSAGE);
+        //TODO: nick added. if necesery, set nick and check
+        Message message = new Message(currentTimeMillis(), "Hello", MessageType.MESSAGE, null);
 
         consoleView.display(message);
         assertThat(outContent.toString(), containsString("Hello"));

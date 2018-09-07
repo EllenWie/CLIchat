@@ -1,4 +1,4 @@
-package com.db.chat;
+package com.db.chat.server;
 
 import java.io.*;
 import java.net.Socket;
@@ -35,7 +35,11 @@ public class ClientSession {
         lock.lock();
         String readLine = null;
         try {
-            readLine = in.readLine();
+            if (in != null) {
+                readLine = in.readLine();
+            } else {
+                System.out.println("in is null");
+            }
         } catch (SocketException e) {
             System.out.println("could not read message");
         }

@@ -1,6 +1,7 @@
-package com.db.chat;
+package com.db.chat.client.view;
 
-import java.util.ArrayList;
+import com.db.chat.client.Client;
+import com.db.chat.core.Message;
 
 public interface View extends Runnable{
     void send(String message);
