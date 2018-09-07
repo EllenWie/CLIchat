@@ -13,14 +13,14 @@ public class Server implements ServerInterface{
     private volatile List<ClientSession> clients;
 
     class MessageGetter implements Runnable {
-        public void handle(String textMessage) {
+        public void handle(ClientSession client, String textMessage) {
             Message message = deserializeMessage(textMessage);
             switch(message.getType()) {
                 case MESSAGE:
                     receive(message);
                     break;
                 case HISTORY:
-                    getHistory();
+                    getHistory(client);
                     break;
                 case ERROR:
                     break;
@@ -37,7 +37,7 @@ public class Server implements ServerInterface{
                             if (client.isNewMessageAvailable()) {
                                 pool.execute(() -> {
                                     try {
-                                        handle(client.readMessage());
+                                        handle(client, client.readMessage());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -81,10 +81,10 @@ public class Server implements ServerInterface{
         }
     }
 
-    public void getHistory() {
+    public void getHistory(ClientSession client) {
         try {
             for (Message message : historyController.getHistory()) {
-                send(message);
+                client.sendMessage(serializeMessage(message));
             }
         } catch (HistoryControllerException e) {
             e.printStackTrace();
