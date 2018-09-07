@@ -41,7 +41,7 @@ public class HistoryController {
             while ((currentMessage = (Message) historyReader.readObject()) != null) {
                 history.add(currentMessage);
             }
-        } catch (EOFException e) {
+        } catch (EOFException | StreamCorruptedException e) {
             return history;
         } catch (ClassNotFoundException | IOException e) {
             throw new HistoryControllerException("Couldn't get history", e);
