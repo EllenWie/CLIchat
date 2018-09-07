@@ -38,6 +38,10 @@ public class Client {
         return nick;
     }
 
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
     public int send(Message message) {
         if (message.getType() == MessageType.MESSAGE && message.getText().length() > inputConstraint) {
             view.display(new Message(null, "Too long message", MessageType.ERROR, nick));
