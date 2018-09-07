@@ -10,14 +10,16 @@ import static org.mockito.Mockito.verify;
 public class ServerTest {
     private Server server;
     private Client mockClient;
+    private ClientSession mockClientSession;
     private Message mockMessage;
     private HistoryController mockHistory;
-/*
+
     @Before
     public void setup() {
         mockHistory = mock(HistoryController.class);
         server = new Server(mockHistory);
         mockClient = mock(Client.class);
+        mockClientSession = mock(ClientSession.class);
         mockMessage = mock(Message.class);
     }
 
@@ -33,6 +35,13 @@ public class ServerTest {
         //server.connect(mockClient);
         server.receive(mockMessage);
 
-        verify(mockClient, times(1)).receive(mockMessage);
-    }*/
+        verify(server, times(1)).send(mockMessage);
+    }
+
+//    public void shouldGetHistoryWhenInvokeMethod() {
+//        server.getHistory(mockClientSession);
+//
+//        verify(server, times(1)).send(mockMessage);
+//        client.sendMessage(serializeMessage(message));
+//    }
 }
