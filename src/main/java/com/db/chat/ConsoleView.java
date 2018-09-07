@@ -16,11 +16,16 @@ public class ConsoleView implements View {
 
     @Override
     public void send(String currentMessage) {
-        String type = currentMessage.substring(0, 5);
+        String[] arguments = currentMessage.split(" ", 2);
+        String type = arguments[0];
         switch (type) {
-            case "/snd ":
-                String text = currentMessage.substring(5);
-                client.send(new Message(null, text, MessageType.MESSAGE));
+            case "/snd":
+                String text = arguments[1].trim();
+                if (text.length() > 0) {
+                    client.send(new Message(null, text, MessageType.MESSAGE));
+                } else {
+                    System.out.println("Empty message. Was not sent to server.");
+                }
                 break;
             case "/hist":
                 client.send(new Message(null, null, MessageType.HISTORY));
