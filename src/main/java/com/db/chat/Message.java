@@ -1,8 +1,9 @@
 package com.db.chat;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Message {
+public class Message implements Serializable {
     private Date time;
     private String text;
     private MessageType type;
