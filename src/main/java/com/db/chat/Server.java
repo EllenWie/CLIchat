@@ -32,14 +32,7 @@ public class Server implements ServerInterface{
             ExecutorService pool = Executors.newFixedThreadPool(10);
             while (!Thread.interrupted()) {
                 try {
-                    int i = 0;
                     for (ClientSession client : clients) {
-<<<<<<< HEAD
-//                        System.out.println(i++);
-=======
-                        System.out.println(i++);
-                        //TODO: doublechecking!!!!!!!
->>>>>>> aa7f38eedd866ee185d0889f07cf3daf1f963423
                         if (client.isNewMessageAvailable()) {
                             pool.execute(() -> {
                                 try {
