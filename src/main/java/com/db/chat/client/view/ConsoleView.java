@@ -42,6 +42,7 @@ public class ConsoleView implements View {
                 String newNick = arguments.length > 1 ? arguments[1].trim() : "";
                 if (newNick.length() > 0) {
                     client.setNick(newNick);
+                    System.out.println("Your nick was set" + System.lineSeparator());
                 } else {
                     display(new Message(null, "Nick must not be empty", MessageType.ERROR, client.getNick()));
                 }
@@ -63,7 +64,7 @@ public class ConsoleView implements View {
     public void display(Message message) {
         switch (message.getType()) {
             case MESSAGE:
-                System.out.println(message.getTime().toString() + System.lineSeparator()
+                System.out.println(message.getTime().toString() + " [" + message.getNick() + "]" + System.lineSeparator()
                         + message.getText() + System.lineSeparator());
                 break;
             case ERROR:

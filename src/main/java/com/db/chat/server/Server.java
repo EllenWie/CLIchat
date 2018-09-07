@@ -40,7 +40,6 @@ public class Server implements Chat {
             while (!Thread.interrupted()) {
                 try {
                     if (clients != null) {
-                        System.out.println("Clients size " + clients.size());
                         for (ClientSession client : clients) {
                             if (client.lock.tryLock()) {
                                 if (client.isNewMessageAvailable()) {

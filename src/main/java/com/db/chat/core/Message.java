@@ -67,4 +67,8 @@ public class Message implements Serializable {
     public String toString() {
         return time.toString() + ": " + text;
     }
+
+    public String getNick() {
+        return nick;
+    }
 }
