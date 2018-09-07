@@ -63,6 +63,7 @@ public class ServerHelper implements Chat {
             }
         }
         pool.shutdownNow();
+        close();
     }
 
     public void setClient(Client client) {
