@@ -6,6 +6,7 @@ public class Client {
     private Chat server;
     private View view;
     private Thread viewThread, socketThread;
+    private static final int inputConstraint = 150;
 
     public Client() {
         this(new ServerHelper("127.0.0.1", 6666));
@@ -29,7 +30,7 @@ public class Client {
     }
 
     public int send(Message message) {
-        if (message.getType() == MessageType.MESSAGE && message.getText().length() > 150) {
+        if (message.getType() == MessageType.MESSAGE && message.getText().length() > inputConstraint) {
             System.out.println("Error: Too long message");
         } else {
             server.receive(message);
