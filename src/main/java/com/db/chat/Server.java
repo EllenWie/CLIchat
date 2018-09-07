@@ -16,6 +16,7 @@ public class Server implements Chat {
     class MessageGetter implements Runnable {
         public void handle(ClientSession client, String textMessage) {
             Message message = deserializeMessage(textMessage);
+            System.out.println(textMessage);
             switch(message.getType()) {
                 case MESSAGE:
                     receive(message);
@@ -34,6 +35,7 @@ public class Server implements Chat {
             while (!Thread.interrupted()) {
                 try {
                     if (clients != null) {
+                        System.out.println("Clients size " + clients.size());
                         for (ClientSession client : clients) {
                             if (client.lock.tryLock()) {
                                 if (client.isNewMessageAvailable()) {
