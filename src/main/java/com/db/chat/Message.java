@@ -9,13 +9,10 @@ public class Message implements Serializable {
     private MessageType type;
 
     public Message() {
-        this.time = null;
-        this.text = null;
-        this.type = null;
     }
 
     public Message(Date time, String text, MessageType type) {
-        this.time = time;
+        this.time = (Date) time.clone();
         this.text = text;
         this.type = type;
     }
@@ -33,11 +30,11 @@ public class Message implements Serializable {
     }
 
     public Date getTime() {
-        return time;
+        return (Date) time.clone();
     }
 
     public void setTime(Date time) {
-        this.time = time;
+        this.time = (Date) time.clone();
     }
 
     public String getText() {
