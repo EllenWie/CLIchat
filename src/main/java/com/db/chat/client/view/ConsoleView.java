@@ -19,6 +19,8 @@ import java.util.concurrent.Executors;
  * It stops after /quit command received.
  * It provides method to print Messages
  * to console with formating.
+ * It has backward reference to Client
+ * object to communicate with it.
  */
 public class ConsoleView implements View {
     transient private Client client;
@@ -137,6 +139,10 @@ public class ConsoleView implements View {
      * It has fixed thread pool to handle
      * every message it has read from console
      * in different thread.
+     * Pool is using because of the
+     * short time of life of handlers
+     * and cost of creating and distructing
+     * new threads.
      */
     @Override
     public void run() {
