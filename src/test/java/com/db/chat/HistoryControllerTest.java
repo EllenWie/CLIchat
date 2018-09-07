@@ -1,12 +1,15 @@
 package com.db.chat;
 
+import com.db.chat.client.Client;
 import com.db.chat.core.Message;
 import com.db.chat.core.MessageType;
+import com.db.chat.server.Server;
 import com.db.chat.server.history.HistoryController;
 import com.db.chat.server.history.HistoryControllerException;
 import org.junit.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +29,7 @@ public class HistoryControllerTest {
     @Test
     public void shouldReturnCorrectListOfMessagesWhenGetHistory() throws HistoryControllerException, InterruptedException {
         HistoryController historyController = new HistoryController("testFile.txt");
-        //TODO: nick added. if necesery, set nick and check
-        Message testMessage = new Message(new Date(), "Hey!", MessageType.MESSAGE, null);
+        Message testMessage = new Message(new Date(), "Hey!", MessageType.MESSAGE, "сельский депутат");
         historyController.addMessage(testMessage);
         sleep(2000);
         List<Message> actualMessageList = historyController.getHistory();
@@ -36,5 +38,23 @@ public class HistoryControllerTest {
         assertEquals(testMessage.getText(), actualMessage.getText());
         assertEquals(testMessage.getType(), actualMessage.getType());
         assertEquals(testMessage.getTime(), actualMessage.getTime());
+        assertEquals(testMessage.getNick(), actualMessage.getNick());
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenTwoThousandClients() throws HistoryControllerException, IOException, InterruptedException {
+        Server testServer = new Server();
+        new Thread(()->testServer.run()).start();
+//        testServer.run();
+        Client myClient = new Client("127.0.0.1", 6666);
+        for (int i = 0; i < 5; ++i) {
+//            for (int j = 0; j < 2; ++j) {
+            myClient.send(new Message(new Date(), String.valueOf(i), MessageType.MESSAGE, String.valueOf(i)));
+//            }
+
+        }
+        myClient.quit();
+        sleep(5000);
+        testServer.close();
     }
 }
