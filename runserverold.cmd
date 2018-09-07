@@ -1,0 +1,1 @@
+java -Dfile.encoding=cp866 -cp %~dp0target\project01-1.0-SNAPSHOT.jar;%~dp0..\.m2\repository\org\codehaus\jackson\jackson-mapper-asl\1.9.13\jackson-mapper-asl-1.9.13.jar;%~dp0..\.m2\repository\org\codehaus\jackson\jackson-core-asl\1.9.13\jackson-core-asl-1.9.13.jar com.db.chat.server.Server
