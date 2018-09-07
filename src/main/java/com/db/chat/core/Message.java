@@ -7,11 +7,12 @@ public class Message implements Serializable {
     private Date time;
     private String text;
     private MessageType type;
+    private String nick;
 
     public Message() {
     }
 
-    public Message(Date time, String text, MessageType type) {
+    public Message(Date time, String text, MessageType type, String nick) {
         if (time != null) {
             this.time = (Date) time.clone();
         } else {
@@ -19,18 +20,15 @@ public class Message implements Serializable {
         }
         this.text = text;
         this.type = type;
+        this.nick = nick;
     }
 
-    public Message(Date time, String text, String type) {
-        this(time, text, MessageType.valueOf(type));
+    public Message(Date time, String text, String type, String nick) {
+        this(time, text, MessageType.valueOf(type), nick);
     }
 
-    public Message(String text, String type) {
-        this(null, text, MessageType.valueOf(type));
-    }
-
-    public Message(long milisec, String text, MessageType type) {
-        this(new Date(milisec), text, type);
+    public Message(long milisec, String text, MessageType type, String nick) {
+        this(new Date(milisec), text, type, nick);
     }
 
     public Date getTime() {

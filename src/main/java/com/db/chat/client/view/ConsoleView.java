@@ -26,16 +26,16 @@ public class ConsoleView implements View {
             case "/snd":
                 String text = arguments.length > 1 ? arguments[1].trim() : "";
                 if (text.length() > 0) {
-                    client.send(new Message(null, text, MessageType.MESSAGE));
+                    client.send(new Message(null, text, MessageType.MESSAGE, client.getNick()));
                 } else {
-                    display(new Message(null, "Empty message. Was not sent to server.", MessageType.ERROR));
+                    display(new Message(null, "Empty message. Was not sent to server.", MessageType.ERROR, client.getNick()));
                 }
                 break;
             case "/hist":
-                client.send(new Message(null, null, MessageType.HISTORY));
+                client.send(new Message(null, null, MessageType.HISTORY, client.getNick()));
                 break;
             default:
-                display(new Message(null, "Wrong command", MessageType.ERROR));
+                display(new Message(null, "Wrong command", MessageType.ERROR, client.getNick()));
         }
     }
 

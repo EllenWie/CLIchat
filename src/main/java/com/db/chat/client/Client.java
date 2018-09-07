@@ -13,6 +13,7 @@ public class Client {
     private View view;
     private Thread viewThread, socketThread;
     private static final int inputConstraint = 150;
+    private String nick;
 
     public Client() {
         this(new ServerHelper("127.0.0.1", 6666));
@@ -33,9 +34,13 @@ public class Client {
         }
     }
 
+    public String getNick() {
+        return nick;
+    }
+
     public int send(Message message) {
         if (message.getType() == MessageType.MESSAGE && message.getText().length() > inputConstraint) {
-            view.display(new Message(null, "Too long message", MessageType.ERROR));
+            view.display(new Message(null, "Too long message", MessageType.ERROR, nick));
         } else {
             server.receive(message);
         }

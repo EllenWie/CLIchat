@@ -15,7 +15,8 @@ public class MessageTest {
 
     @Before
     public void setup() {
-        message = new Message(Long.MIN_VALUE, "THIS", MessageType.MESSAGE);
+        //TODO: nick added. if necesery, set nick and check
+        message = new Message(Long.MIN_VALUE, "THIS", MessageType.MESSAGE, null);
         minDate = new Date(Long.MIN_VALUE);
     }
 

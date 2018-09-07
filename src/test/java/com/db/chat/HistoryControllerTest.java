@@ -26,7 +26,8 @@ public class HistoryControllerTest {
     @Test
     public void shouldReturnCorrectListOfMessagesWhenGetHistory() throws HistoryControllerException, InterruptedException {
         HistoryController historyController = new HistoryController("testFile.txt");
-        Message testMessage = new Message(new Date(), "Hey!", MessageType.MESSAGE);
+        //TODO: nick added. if necesery, set nick and check
+        Message testMessage = new Message(new Date(), "Hey!", MessageType.MESSAGE, null);
         historyController.addMessage(testMessage);
         sleep(2000);
         List<Message> actualMessageList = historyController.getHistory();

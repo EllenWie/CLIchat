@@ -61,7 +61,7 @@ public class ServerHelper implements Chat {
             out.println(serializeMessage(message));
             out.flush();
         } catch (NullPointerException e) {
-            client.receive(new Message(null, "Have no connection to server", MessageType.ERROR));
+            client.receive(new Message(null, "Have no connection to server", MessageType.ERROR, client.getNick()));
         }
     }
 
@@ -80,7 +80,7 @@ public class ServerHelper implements Chat {
                     send(deserializeMessage(textMessage));
                 });
             } catch (IOException e) {
-                client.receive(new Message(null, "Server is down", MessageType.ERROR));
+                client.receive(new Message(null, "Server is down", MessageType.ERROR, client.getNick()));
                 Thread.currentThread().interrupt();
             }
         }

@@ -41,7 +41,8 @@ public class ViewMessageTest {
 
     @Test
     public void shouldDisplayMessageContentWhenInvokeDisplay() {
-        Message message = new Message(currentTimeMillis(), "Hello", MessageType.MESSAGE);
+        //TODO: nick added. if necesery, set nick and check
+        Message message = new Message(currentTimeMillis(), "Hello", MessageType.MESSAGE, null);
 
         consoleView.display(message);
         assertThat(outContent.toString(), containsString("Hello"));
