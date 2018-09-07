@@ -38,7 +38,10 @@ public class Server implements Chat {
                                 pool.execute(() -> {
                                     try {
                                         handle(client, client.readMessage());
+                                    } catch (NullPointerException e) {
+                                        clients.remove(client);
                                     } catch (IOException e) {
+                                        System.out.println("io exception");
                                         e.printStackTrace();
                                     }
                                 });
@@ -47,6 +50,7 @@ public class Server implements Chat {
                         }
                     }
                 } catch(ConcurrentModificationException e) {
+                } catch (NullPointerException e) {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

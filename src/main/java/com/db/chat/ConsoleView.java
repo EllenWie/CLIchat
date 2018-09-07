@@ -16,17 +16,23 @@ public class ConsoleView implements View {
 
     @Override
     public void send(String currentMessage) {
-        String type = currentMessage.substring(0, 5);
+        String[] arguments = currentMessage.split(" ", 2);
+        String type = arguments[0];
         switch (type) {
-            case "/snd ":
-                String text = currentMessage.substring(5);
-                client.send(new Message(null, text, MessageType.MESSAGE));
+            case "/snd":
+                if (arguments.length > 1) {
+                    String text = arguments[1].trim();
+                    if (text.length() > 0) {
+                        client.send(new Message(null, text, MessageType.MESSAGE));
+                    } else {
+                        System.out.println("Empty message. Was not sent to server.");
+                    }
+                } else {
+                    System.out.println("Empty message. Was not sent to server.");
+                }
                 break;
             case "/hist":
                 client.send(new Message(null, null, MessageType.HISTORY));
-                break;
-            case "/quit":
-                client.quit();
                 break;
             default:
                 System.out.println("wrong command");
@@ -47,9 +53,13 @@ public class ConsoleView implements View {
                         new BufferedInputStream(System.in)))) {
             while (!Thread.interrupted()) {
                 String currentMessage = bufferedReader.readLine();
-                pool.execute(() -> {
-                    send(currentMessage);
-                });
+                if ("/quit".equals(currentMessage.split(" ", 2)[0])) {
+                    client.quit();
+                } else {
+                    pool.execute(() -> {
+                        send(currentMessage);
+                    });
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
