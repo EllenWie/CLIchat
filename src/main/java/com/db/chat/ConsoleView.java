@@ -20,29 +20,32 @@ public class ConsoleView implements View {
         String type = arguments[0];
         switch (type) {
             case "/snd":
-                if (arguments.length > 1) {
-                    String text = arguments[1].trim();
-                    if (text.length() > 0) {
-                        client.send(new Message(null, text, MessageType.MESSAGE));
-                    } else {
-                        System.out.println("Empty message. Was not sent to server.");
-                    }
+                String text = arguments.length > 1 ? arguments[1].trim() : "";
+                if (text.length() > 0) {
+                    client.send(new Message(null, text, MessageType.MESSAGE));
                 } else {
-                    System.out.println("Empty message. Was not sent to server.");
+                    display(new Message(null, "Empty message. Was not sent to server.", MessageType.ERROR));
                 }
                 break;
             case "/hist":
                 client.send(new Message(null, null, MessageType.HISTORY));
                 break;
             default:
-                System.out.println("wrong command");
+                display(new Message(null, "Wrong command", MessageType.ERROR));
         }
     }
 
     @Override
     public void display(Message message) {
-        System.out.println(message.getTime().toString() + System.lineSeparator()
-                + message.getText() + System.lineSeparator());
+        switch (message.getType()) {
+            case MESSAGE:
+                System.out.println(message.getTime().toString() + System.lineSeparator()
+                        + message.getText() + System.lineSeparator());
+                break;
+            case ERROR:
+                System.out.println("Error: " + message.getText() + System.lineSeparator());
+                break;
+        }
     }
 
     @Override
