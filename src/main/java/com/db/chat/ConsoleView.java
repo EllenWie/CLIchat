@@ -20,9 +20,13 @@ public class ConsoleView implements View {
         String type = arguments[0];
         switch (type) {
             case "/snd":
-                String text = arguments[1].trim();
-                if (text.length() > 0) {
-                    client.send(new Message(null, text, MessageType.MESSAGE));
+                if (arguments.length > 1) {
+                    String text = arguments[1].trim();
+                    if (text.length() > 0) {
+                        client.send(new Message(null, text, MessageType.MESSAGE));
+                    } else {
+                        System.out.println("Empty message. Was not sent to server.");
+                    }
                 } else {
                     System.out.println("Empty message. Was not sent to server.");
                 }
