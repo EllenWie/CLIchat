@@ -25,40 +25,29 @@ public class Server implements ServerInterface{
                 case ERROR:
                     break;
             }
-            System.out.println("handler finished");
         }
+
         @Override
         public void run() {
             ExecutorService pool = Executors.newFixedThreadPool(10);
             while (!Thread.interrupted()) {
                 try {
-                    int i = 0;
                     for (ClientSession client : clients) {
-                        System.out.println(i++);
-                        //TODO: doublechecking!!!!!!!
-                        //if (client.isNewMessageAvailable()) {
-                            if (client.lock.tryLock()) {
-                                if (client.isNewMessageAvailable()) {
-                                    pool.execute(() -> {
-                                        try {
-                                            handle(client.readMessage());
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        System.out.println("thread finished");
-                                    });
-                                    System.out.println("pool execute finished");
-                                } else {
-                                    System.out.println("synched but not available");
-                                }
-                                client.lock.unlock();
+                        if (client.lock.tryLock()) {
+                            if (client.isNewMessageAvailable()) {
+                                pool.execute(() -> {
+                                    try {
+                                        handle(client.readMessage());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
                             }
-                        //}
+                            client.lock.unlock();
+                        }
                     }
                 } catch(ConcurrentModificationException e) {
-                    System.out.println("beda");
                 } catch (Exception e) {
-                    System.out.println("unknown exception");
                     e.printStackTrace();
                 }
             }
@@ -77,7 +66,6 @@ public class Server implements ServerInterface{
     }
 
     public void receive(Message message) {
-        System.out.println("received message: "+ message.getText());
         message.setTime(new Date());
         try {
             this.historyController.addMessage(message);
@@ -85,14 +73,12 @@ public class Server implements ServerInterface{
             e.printStackTrace();
         }
         this.send(message);
-        System.out.println("sended to all (from receive)"+ message.getText());
     }
 
     public void send(Message message) {
         for (ClientSession client : this.clients) {
             client.sendMessage(serializeMessage(message));
         }
-        System.out.println("sended to all "+ message.getText());
     }
 
     public void getHistory() {
@@ -116,10 +102,7 @@ public class Server implements ServerInterface{
             while (!Thread.interrupted()) {
                 try {
                     Socket clientConnection = portListener.accept();
-                    synchronized (clientConnection) {
-                        clients.add(new ClientSession(clientConnection));
-                    }
-                    System.out.println("Now clients length is "+ clients.size());
+                    clients.add(new ClientSession(clientConnection));
                 } catch (SocketTimeoutException e) {
 
                 }

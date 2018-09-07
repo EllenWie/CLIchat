@@ -41,7 +41,6 @@ public class Client {
     }
 
     public void quit() {
-        System.out.println("client got quit message");
         try {
             server.close();
         } catch (IOException e) {

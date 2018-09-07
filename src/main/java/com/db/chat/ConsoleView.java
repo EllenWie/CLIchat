@@ -55,6 +55,5 @@ public class ConsoleView implements View {
             e.printStackTrace();
         }
         pool.shutdownNow();
-        System.out.println("consoleview finished");
     }
 }
