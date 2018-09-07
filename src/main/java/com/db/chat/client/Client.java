@@ -8,15 +8,19 @@ import com.db.chat.core.MessageType;
 
 import java.io.IOException;
 
+/**
+ * Client class is main client application.
+ * It can send messages to server and receive from it.
+ */
 public class Client {
-    private Chat server;
-    private View view;
-    private Thread viewThread, socketThread;
+    transient private Chat server;
+    transient private View view;
+    transient private Thread viewThread, socketThread;
     private static final int inputConstraint = 150;
     private String nick;
 
-    public Client() {
-        this(new ServerHelper("127.0.0.1", 6666));
+    public Client(String host, int port) {
+        this(new ServerHelper(host, port));
     }
 
     public Client(Chat server) {
@@ -34,14 +38,26 @@ public class Client {
         }
     }
 
+    /**
+     * @return user's nick
+     */
     public String getNick() {
         return nick;
     }
 
+    /**
+     * sets user's nick
+     * @param nick
+     */
     public void setNick(String nick) {
         this.nick = nick;
     }
 
+    /**
+     * sends message object to server (through helper)
+     * @param message
+     * @return
+     */
     public int send(Message message) {
         if (message.getType() == MessageType.MESSAGE && message.getText().length() > inputConstraint) {
             view.display(new Message(null, "Too long message", MessageType.ERROR, nick));
@@ -51,11 +67,19 @@ public class Client {
         return 0;
     }
 
+    /**
+     * this method invokes whenever new message from server had been received
+     * @param message
+     * @return
+     */
     public int receive(Message message) {
         view.display(message);
         return 0;
     }
 
+    /**
+     * start this method after creating Client object to run all needed threads
+     */
     public void start() {
         if (((ServerHelper)this.server).isConnected()) {
             socketThread.start();
@@ -63,6 +87,9 @@ public class Client {
         viewThread.start();
     }
 
+    /**
+     * shut down of client application
+     */
     public void quit() {
         try {
             server.close();
@@ -73,8 +100,12 @@ public class Client {
         socketThread.interrupt();
     }
 
-    public static void main(String[] args) {
-        Client client = new Client();
+    /**
+     * Enter point to client application
+     * @param args
+     */
+    public static void main(String... args) {
+        Client client = new Client("127.0.0.1", 6666);
         client.start();
     }
 
