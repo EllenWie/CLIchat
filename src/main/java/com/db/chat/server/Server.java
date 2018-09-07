@@ -13,6 +13,8 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.util.Collections.synchronizedList;
+
 public class Server implements Chat {
     private HistoryController historyController;
     private volatile List<ClientSession> clients;
@@ -40,21 +42,23 @@ public class Server implements Chat {
             while (!Thread.interrupted()) {
                 try {
                     if (clients != null) {
-                        for (ClientSession client : clients) {
-                            if (client.lock.tryLock()) {
-                                if (client.isNewMessageAvailable()) {
-                                    pool.execute(() -> {
-                                        try {
-                                            handle(client, client.readMessage());
-                                        } catch (NullPointerException e) {
-                                            clients.remove(client);
-                                        } catch (IOException e) {
-                                            System.out.println("io exception");
-                                            e.printStackTrace();
-                                        }
-                                    });
+                        synchronized (clients) {
+                            for (ClientSession client : clients) {
+                                if (client.lock.tryLock()) {
+                                    if (client.isNewMessageAvailable()) {
+                                        pool.execute(() -> {
+                                            try {
+                                                handle(client, client.readMessage());
+                                            } catch (NullPointerException e) {
+                                                clients.remove(client);
+                                            } catch (IOException e) {
+                                                System.out.println("io exception");
+                                                e.printStackTrace();
+                                            }
+                                        });
+                                    }
+                                    client.lock.unlock();
                                 }
-                                client.lock.unlock();
                             }
                         }
                     }
@@ -72,7 +76,7 @@ public class Server implements Chat {
 
     public Server(HistoryController historyController) {
         this.historyController = historyController;
-        clients = new LinkedList<>();//Collections.synchronizedList(new LinkedList<>());//
+        clients = synchronizedList(new LinkedList<>());//
         messageGetter = new Thread(new MessageGetter());
     }
 
@@ -87,9 +91,12 @@ public class Server implements Chat {
     }
 
     public void send(Message message) {
-        for (ClientSession client : this.clients) {
-            client.sendMessage(serializeMessage(message));
+        synchronized (clients) {
+            for (ClientSession client : clients) {
+                client.sendMessage(serializeMessage(message));
+            }
         }
+
     }
 
     public void getHistory(ClientSession client) {
