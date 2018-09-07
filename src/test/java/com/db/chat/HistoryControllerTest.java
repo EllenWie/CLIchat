@@ -55,7 +55,6 @@ public class HistoryControllerTest {
 
         }
         myClient.quit();
-        sleep(10000);
         testServer.close();
     }
 }
