@@ -67,16 +67,31 @@ public class HistoryController {
     }
 
     private void initOutputStream() throws HistoryControllerException {
-        try {
-            historyWriter =
-                    new ObjectOutputStream(
-                            new FileOutputStream(
-                                    new File(".", historyFileName),
-                                    true
-                            )
-                    );
-        } catch (IOException e) {
-            throw new HistoryControllerException("Couldn't init history", e);
+        File historyFile = new File(".", historyFileName);
+        if (historyFile.exists()) {
+            try {
+                historyWriter =
+                        new AppendingObjectOutputStream(
+                                new FileOutputStream(
+                                        new File(".", historyFileName),
+                                        true
+                                )
+                        );
+            } catch (IOException e) {
+                throw new HistoryControllerException("Couldn't init history", e);
+            }
+        } else {
+            try {
+                historyWriter =
+                        new ObjectOutputStream(
+                                new FileOutputStream(
+                                        new File(".", historyFileName),
+                                        true
+                                )
+                        );
+            } catch (IOException e) {
+                throw new HistoryControllerException("Couldn't init history", e);
+            }
         }
     }
 
@@ -94,4 +109,16 @@ public class HistoryController {
             return true;
         }));
     }
+}
+
+class AppendingObjectOutputStream extends ObjectOutputStream {
+    public AppendingObjectOutputStream(FileOutputStream out) throws IOException {
+        super(out);
+    }
+
+    @Override
+    protected void writeStreamHeader() throws IOException {
+        reset();
+    }
+
 }
