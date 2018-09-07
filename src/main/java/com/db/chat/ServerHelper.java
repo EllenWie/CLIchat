@@ -34,14 +34,19 @@ public class ServerHelper implements Chat {
 
     public void close() {
         try {
-            socket.close();
-            in.close();
-            out.close();
-            socket = null;
-            in = null;
-            out = null;
-        } catch (NullPointerException e) {
-        } catch (Exception e) {
+            if (socket != null) {
+                socket.close();
+                socket = null;
+            }
+            if (in != null) {
+                in.close();
+                in = null;
+            }
+            if (out != null) {
+                out.close();
+                out = null;
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

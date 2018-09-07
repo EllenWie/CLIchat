@@ -21,11 +21,9 @@ public class Client {
         this.view = view;
         this.view.setClient(this);
         viewThread = new Thread(this.view);
-        viewThread.start();
         if (((ServerHelper)this.server).isConnected()) {
             ((ServerHelper) this.server).setClient(this);
             socketThread = new Thread((ServerHelper) this.server);
-            socketThread.start();
         }
     }
 
@@ -43,6 +41,13 @@ public class Client {
         return 0;
     }
 
+    public void start() {
+        if (((ServerHelper)this.server).isConnected()) {
+            socketThread.start();
+        }
+        viewThread.start();
+    }
+
     public void quit() {
         try {
             server.close();
@@ -55,6 +60,7 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
+        client.start();
     }
 
 

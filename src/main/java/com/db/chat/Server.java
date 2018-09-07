@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 public class Server implements Chat {
     private HistoryController historyController;
     private volatile List<ClientSession> clients;
+    private Thread messageGetter;
 
     class MessageGetter implements Runnable {
         public void handle(ClientSession client, String textMessage) {
@@ -32,27 +33,27 @@ public class Server implements Chat {
             ExecutorService pool = Executors.newFixedThreadPool(10);
             while (!Thread.interrupted()) {
                 try {
-                    for (ClientSession client : clients) {
-                        if (client.lock.tryLock()) {
-                            if (client.isNewMessageAvailable()) {
-                                pool.execute(() -> {
-                                    try {
-                                        handle(client, client.readMessage());
-                                    } catch (NullPointerException e) {
-                                        clients.remove(client);
-                                    } catch (IOException e) {
-                                        System.out.println("io exception");
-                                        e.printStackTrace();
-                                    }
-                                });
+                    if (clients != null) {
+                        for (ClientSession client : clients) {
+                            if (client.lock.tryLock()) {
+                                if (client.isNewMessageAvailable()) {
+                                    pool.execute(() -> {
+                                        try {
+                                            handle(client, client.readMessage());
+                                        } catch (NullPointerException e) {
+                                            clients.remove(client);
+                                        } catch (IOException e) {
+                                            System.out.println("io exception");
+                                            e.printStackTrace();
+                                        }
+                                    });
+                                }
+                                client.lock.unlock();
                             }
-                            client.lock.unlock();
                         }
                     }
                 } catch(ConcurrentModificationException e) {
-                } catch (NullPointerException e) {
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    continue;
                 }
             }
             pool.shutdownNow();
@@ -66,7 +67,7 @@ public class Server implements Chat {
     public Server(HistoryController historyController) {
         this.historyController = historyController;
         clients = new LinkedList<>();//Collections.synchronizedList(new LinkedList<>());//
-        new Thread(new MessageGetter()).start();
+        messageGetter = new Thread(new MessageGetter());
     }
 
     public void receive(Message message) {
@@ -101,6 +102,7 @@ public class Server implements Chat {
     }
 
     public void run() {
+        messageGetter.start();
         try (ServerSocket portListener = new ServerSocket(6666)) {
             portListener.setSoTimeout(1000);
             while (!Thread.interrupted()) {
