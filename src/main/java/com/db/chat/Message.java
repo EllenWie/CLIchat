@@ -12,7 +12,11 @@ public class Message implements Serializable {
     }
 
     public Message(Date time, String text, MessageType type) {
-        this.time = (Date) time.clone();
+        if (time != null) {
+            this.time = (Date) time.clone();
+        } else {
+            this.time = null;
+        }
         this.text = text;
         this.type = type;
     }
@@ -30,11 +34,19 @@ public class Message implements Serializable {
     }
 
     public Date getTime() {
-        return (Date) time.clone();
+        if (time != null) {
+            return (Date) time.clone();
+        } else {
+            return null;
+        }
     }
 
     public void setTime(Date time) {
-        this.time = (Date) time.clone();
+        if (time != null) {
+            this.time = (Date) time.clone();
+        } else {
+            this.time = null;
+        }
     }
 
     public String getText() {
