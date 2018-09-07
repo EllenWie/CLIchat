@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public class Server implements ServerInterface{
     private HistoryController historyController;
-    private List<ClientSession> clients;
+    private volatile List<ClientSession> clients;
 
     class MessageGetter implements Runnable {
         public void handle(String textMessage) {
@@ -25,6 +25,7 @@ public class Server implements ServerInterface{
                 case ERROR:
                     break;
             }
+            System.out.println("handler finished");
         }
         @Override
         public void run() {
@@ -33,7 +34,12 @@ public class Server implements ServerInterface{
                 try {
                     int i = 0;
                     for (ClientSession client : clients) {
+<<<<<<< HEAD
 //                        System.out.println(i++);
+=======
+                        System.out.println(i++);
+                        //TODO: doublechecking!!!!!!!
+>>>>>>> aa7f38eedd866ee185d0889f07cf3daf1f963423
                         if (client.isNewMessageAvailable()) {
                             pool.execute(() -> {
                                 try {
@@ -41,11 +47,13 @@ public class Server implements ServerInterface{
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                System.out.println("thread finished");
                             });
+                            System.out.println("pool execute finished");
                         }
                     }
                 } catch(ConcurrentModificationException e) {
-
+                    System.out.println("beda");
                 } catch (Exception e) {
                     System.out.println("unknown exception");
                     e.printStackTrace();
@@ -61,7 +69,7 @@ public class Server implements ServerInterface{
 
     public Server(HistoryController historyController) {
         this.historyController = historyController;
-        clients = Collections.synchronizedList(new LinkedList<>());
+        clients = new LinkedList<>();//Collections.synchronizedList(new LinkedList<>());//
         new Thread(new MessageGetter()).start();
     }
 
@@ -105,7 +113,10 @@ public class Server implements ServerInterface{
             while (!Thread.interrupted()) {
                 try {
                     Socket clientConnection = portListener.accept();
-                    clients.add(new ClientSession(clientConnection));
+                    synchronized (clientConnection) {
+                        clients.add(new ClientSession(clientConnection));
+                    }
+                    System.out.println("Now clients length is "+ clients.size());
                 } catch (SocketTimeoutException e) {
 
                 }

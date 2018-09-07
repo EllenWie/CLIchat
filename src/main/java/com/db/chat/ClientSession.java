@@ -18,6 +18,7 @@ public class ClientSession {
                 new InputStreamReader(
                         new BufferedInputStream(
                                 socket.getInputStream())));
+
     }
 
     public void sendMessage(String message) {
@@ -26,7 +27,9 @@ public class ClientSession {
     }
 
     public String readMessage() throws IOException {
-        return in.readLine();
+        String s = in.readLine();
+        System.out.println("readed message: "+ s);
+        return s;
     }
 
     public boolean isNewMessageAvailable() {
