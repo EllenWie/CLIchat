@@ -1,1 +1,1 @@
-java -Dfile.encoding=cp866 -cp %~dp0target\project01-1.0-SNAPSHOT.jar com.db.chat.Client
+java -Dfile.encoding=cp866 -cp %~dp0target\project01-1.0-SNAPSHOT.jar com.db.chat.client.Client

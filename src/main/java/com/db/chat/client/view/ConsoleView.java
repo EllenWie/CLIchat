@@ -1,4 +1,8 @@
-package com.db.chat;
+package com.db.chat.client.view;
+
+import com.db.chat.client.Client;
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

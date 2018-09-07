@@ -1,4 +1,6 @@
-package com.db.chat;
+package com.db.chat.server.history;
+
+import com.db.chat.core.Message;
 
 import java.io.*;
 import java.util.LinkedList;

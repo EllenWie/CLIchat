@@ -1,4 +1,4 @@
-package com.db.chat;
+package com.db.chat.core;
 
 import java.io.Serializable;
 import java.util.Date;

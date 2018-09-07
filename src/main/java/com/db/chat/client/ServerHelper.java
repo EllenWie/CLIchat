@@ -1,4 +1,8 @@
-package com.db.chat;
+package com.db.chat.client;
+
+import com.db.chat.core.Chat;
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
 
 import java.io.*;
 import java.net.Socket;

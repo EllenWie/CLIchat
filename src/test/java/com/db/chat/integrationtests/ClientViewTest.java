@@ -1,17 +1,10 @@
 package com.db.chat.integrationtests;
 
-import com.db.chat.Client;
-import com.db.chat.Message;
-import com.db.chat.Server;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import com.db.chat.client.Client;
+import com.db.chat.core.Message;
+import com.db.chat.server.Server;
 
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class ClientViewTest {
     private Server server;

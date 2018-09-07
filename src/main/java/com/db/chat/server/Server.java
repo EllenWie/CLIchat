@@ -1,4 +1,9 @@
-package com.db.chat;
+package com.db.chat.server;
+
+import com.db.chat.core.Message;
+import com.db.chat.core.Chat;
+import com.db.chat.server.history.HistoryController;
+import com.db.chat.server.history.HistoryControllerException;
 
 import java.io.IOException;
 import java.net.ServerSocket;

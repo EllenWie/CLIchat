@@ -1,5 +1,11 @@
 package com.db.chat;
 
+import com.db.chat.client.Client;
+import com.db.chat.core.Message;
+import com.db.chat.server.ClientSession;
+import com.db.chat.server.history.HistoryController;
+import com.db.chat.server.history.HistoryControllerException;
+import com.db.chat.server.Server;
 import org.junit.Before;
 import org.junit.Test;
 

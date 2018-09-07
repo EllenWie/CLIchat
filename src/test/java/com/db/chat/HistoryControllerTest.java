@@ -1,5 +1,9 @@
 package com.db.chat;
 
+import com.db.chat.core.Message;
+import com.db.chat.core.MessageType;
+import com.db.chat.server.history.HistoryController;
+import com.db.chat.server.history.HistoryControllerException;
 import org.junit.*;
 
 import java.io.File;
