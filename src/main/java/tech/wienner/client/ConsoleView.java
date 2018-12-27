@@ -1,4 +1,6 @@
-package tech.wienner;
+package tech.wienner.client;
+
+import tech.wienner.common.Message;
 
 public class ConsoleView implements View {
     @Override

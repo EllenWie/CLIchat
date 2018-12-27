@@ -1,5 +1,14 @@
 package tech.wienner;
 
+import tech.wienner.client.Client;
+import tech.wienner.client.ConsoleView;
+import tech.wienner.client.View;
+import tech.wienner.common.Message;
+import tech.wienner.common.Sender;
+import tech.wienner.server.MemoryPersister;
+import tech.wienner.server.Persister;
+import tech.wienner.server.Server;
+
 import java.util.Date;
 
 public class App {

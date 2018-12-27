@@ -1,4 +1,7 @@
-package tech.wienner;
+package tech.wienner.server;
+
+import tech.wienner.common.Message;
+import tech.wienner.client.Client;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,13 +33,13 @@ public class Server {
         return this.clients;
     }
 
-    void receiveMessage(Message message){
+    public void receiveMessage(Message message){
         messagePersister.write(message);
         sendMessage(message);
         System.out.println("Message was received - persisting to memory");
     }
 
-    void sendMessage(Message message){
+    public void sendMessage(Message message){
         for (Client client : clients.values()) {
             client.receiveMessage(message);
         }

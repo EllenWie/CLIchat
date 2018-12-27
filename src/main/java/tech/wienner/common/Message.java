@@ -1,4 +1,4 @@
-package tech.wienner;
+package tech.wienner.common;
 
 import java.util.Date;
 

@@ -1,4 +1,6 @@
-package tech.wienner;
+package tech.wienner.server;
+
+import tech.wienner.common.Message;
 
 import java.util.ArrayList;
 

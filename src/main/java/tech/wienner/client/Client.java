@@ -1,4 +1,7 @@
-package tech.wienner;
+package tech.wienner.client;
+
+import tech.wienner.common.Message;
+import tech.wienner.server.Server;
 
 import java.util.UUID;
 
@@ -18,11 +21,11 @@ public class Client {
         return clientId;
     }
 
-    void sendMessage(Message message) {
+    public void sendMessage(Message message) {
         server.receiveMessage(message);
     }
 
-    void receiveMessage(Message message){
+    public void receiveMessage(Message message){
         view.display(message);
     }
 }
